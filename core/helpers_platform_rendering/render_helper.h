@@ -1,10 +1,11 @@
 #pragma once
 #include <SDL3/SDL.h>
+#include <string>
+
 #include <core/config.h>
 #include <core/globals.h>
-#include <string>
-struct RenderColors
-{
+
+struct RenderColors {
     static constexpr SDL_Color primary = {0, 20, 40, 255}; // game background
     static constexpr SDL_Color secondary = {46, 62, 85, 155};
     static constexpr SDL_Color textPrimary = {220, 161, 29, 255};    // gold titles
@@ -24,8 +25,7 @@ struct RenderColors
     static constexpr SDL_Color grey = {200, 200, 200, 255};       // HUD separator
 };
 
-class RenderHelper
-{
+class RenderHelper {
   public:
     static void setRenderDrawColor(const SDL_Color& c);
     static void renderCloseButton();

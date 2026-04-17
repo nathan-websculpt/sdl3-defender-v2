@@ -4,19 +4,16 @@
 #include <string>
 #include <unordered_map>
 struct TTF_Font;
-struct TTF_Font_Deleter
-{
-    void operator()(TTF_Font* font) const
-    {
-        if (font)
-        {
+
+struct TTF_Font_Deleter {
+    void operator()(TTF_Font* font) const {
+        if (font) {
             TTF_CloseFont(font);
         }
     }
 };
 
-class FontManager
-{
+class FontManager {
   public:
     // enforce singleton
     FontManager(const FontManager&) = delete;

@@ -1,14 +1,14 @@
 #pragma once
 #include <chrono>
+#include <entities/health_item.h>
+
 #include <core/game_state_data.h>
 #include <core/helpers_game/game_helper.h>
 #include <core/high_scores/high_scores.h>
 #include <core/random/rng_service.h>
-#include <entities/health_item.h>
 using SecondsF = std::chrono::duration<float>;
 
-class Game
-{
+class Game {
   public:
     Game();
     explicit Game(std::uint64_t baseSeed);
@@ -23,16 +23,16 @@ class Game
     void startNewGame();
     void update(SecondsF deltaTime);
     void handleInput(const GameInput& input, SecondsF deltaTime);
-    const GameStateData& getState() const
-    {
+
+    const GameStateData& getState() const {
         return m_state;
     }
-    GameStateData& getState()
-    {
+
+    GameStateData& getState() {
         return m_state;
     }
-    const Random::SeedSet& getRngSeeds() const
-    {
+
+    const Random::SeedSet& getRngSeeds() const {
         return m_rng.seeds;
     }
 

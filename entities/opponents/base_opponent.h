@@ -1,13 +1,13 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <core/random/rng_service.h>
 #include <entities/projectile.h>
 #include <plf/plf_colony.h>
 #include <string>
+
+#include <core/random/rng_service.h>
 class Particle;
 
-class BaseOpponent
-{
+class BaseOpponent {
   public:
     BaseOpponent(float x, float y, float w, float h);
     virtual ~BaseOpponent() = default;
@@ -17,14 +17,14 @@ class BaseOpponent
 
     SDL_FRect getBounds() const;
 
-    bool isAlive() const
-    {
+    bool isAlive() const {
         return m_health > 0;
     }
-    virtual bool damagesWorldOnGroundImpact() const
-    {
+
+    virtual bool damagesWorldOnGroundImpact() const {
         return false;
     }
+
     void takeDamage(int damage);
 
     plf::colony<Projectile>& getProjectiles();
@@ -39,8 +39,7 @@ class BaseOpponent
     bool isOnScreen(float objX, float cameraX) const;
 
   protected:
-    struct ExplosionConfig
-    {
+    struct ExplosionConfig {
         int numParticles = 200;
         float speedMin = 50.0f;
         float speedMax = 150.0f;

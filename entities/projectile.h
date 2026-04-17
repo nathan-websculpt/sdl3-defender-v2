@@ -2,10 +2,11 @@
 #include <SDL3/SDL.h>
 #include <algorithm>
 #include <cmath>
-#include <core/config.h>
 #include <numbers>
-class Projectile
-{
+
+#include <core/config.h>
+
+class Projectile {
   public:
     // for player: fire horizontally
     Projectile(float spawnX, float spawnY, float direction, float speed);
@@ -19,51 +20,46 @@ class Projectile
     SDL_FRect getBounds() const; // just a hit box
 
     // for spawn position (to calculate beam start point)
-    float getSpawnX() const
-    {
+    float getSpawnX() const {
         return m_spawnX;
     }
-    float getSpawnY() const
-    {
+
+    float getSpawnY() const {
         return m_spawnY;
     }
 
     // for current position (to calculate beam endpoint)
-    float getCurrentX() const
-    {
+    float getCurrentX() const {
         return m_rect.x;
     }
-    float getCurrentY() const
-    {
+
+    float getCurrentY() const {
         return m_rect.y;
     }
 
-    float getAge() const
-    {
+    float getAge() const {
         return m_age;
     }
-    float getLifetime() const
-    {
+
+    float getLifetime() const {
         return m_lifetime;
     }
-    bool isExpired() const
-    {
+
+    bool isExpired() const {
         return m_age >= m_lifetime;
     }
-    SDL_FPoint getVelocity() const
-    {
+
+    SDL_FPoint getVelocity() const {
         return m_velocity;
     } // for direction of beam
-    bool isHorizontal() const
-    {
+
+    bool isHorizontal() const {
         return m_isHorizontal;
     } // for beam type
 
     // helper to calculate color based on age
-    SDL_Color getColor() const
-    {
-        auto toColorChannel = [](float value) -> Uint8
-        {
+    SDL_Color getColor() const {
+        auto toColorChannel = [](float value) -> Uint8 {
             if (!std::isfinite(value))
                 return 0;
             const float clamped = std::clamp(value, 0.0f, 255.0f);

@@ -1,8 +1,8 @@
 #include <cmath>
 #include <entities/opponents/aggressive_opponent.h>
+
 AggressiveOpponent::AggressiveOpponent(float x, float y, float w, float h)
-    : BaseOpponent(x, y, w, h)
-{
+    : BaseOpponent(x, y, w, h) {
     m_lifetime = 0.0f;
     m_speed = 70.0f;
     m_fireInterval = 1.8f;
@@ -25,8 +25,7 @@ AggressiveOpponent::AggressiveOpponent(float x, float y, float w, float h)
 }
 
 void AggressiveOpponent::update(float deltaTime, const SDL_FPoint& playerPos, float cameraX,
-                                Random::RngEngine& simRng)
-{
+                                Random::RngEngine& simRng) {
     if (m_health <= 0)
         return;
     m_lifetime += deltaTime;
@@ -49,21 +48,18 @@ void AggressiveOpponent::update(float deltaTime, const SDL_FPoint& playerPos, fl
     float dy = targetY - m_rect.y;
 
     // go left/right
-    if (std::abs(dx) > 1.0f)
-    {
+    if (std::abs(dx) > 1.0f) {
         m_rect.x += (dx > 0 ? 1 : -1) * speed * deltaTime;
     }
     // go up/down
-    if (std::abs(dy) > 1.0f)
-    {
+    if (std::abs(dy) > 1.0f) {
         m_rect.y += (dy > 0 ? 1 : -1) * speed * deltaTime;
     }
 
     m_fireTimer += deltaTime;
     bool opponentVisible = isOnScreen(m_rect.x + m_rect.w / 2, cameraX);
 
-    if (opponentVisible && m_fireTimer >= m_fireInterval)
-    {
+    if (opponentVisible && m_fireTimer >= m_fireInterval) {
         m_projectiles.emplace(m_rect.x + m_rect.w / 2, m_rect.y + m_rect.h / 2, targetX, targetY,
                               300.0f);
         m_fireTimer = 0.0f;

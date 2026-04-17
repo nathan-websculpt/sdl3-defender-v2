@@ -1,3 +1,5 @@
+#include <string>
+
 #include <core/config.h>
 #include <core/game_state_data.h>
 #include <core/globals.h>
@@ -5,9 +7,8 @@
 #include <core/helpers_platform_rendering/render_screens.h>
 #include <core/helpers_platform_rendering/ui_button_renderer.h>
 #include <core/managers/texture_manager.h>
-#include <string>
-void RenderScreens::renderMainMenu()
-{
+
+void RenderScreens::renderMainMenu() {
     RenderHelper::setRenderDrawColor(RenderColors::primary);
     SDL_RenderClear(globals.renderer);
     RenderHelper::renderText("SDL3 DEFENDER", globals.windowWidth / 2 - 100,
@@ -31,8 +32,7 @@ void RenderScreens::renderMainMenu()
         "Exit"));
 }
 
-void RenderScreens::renderHowToPlayScreen()
-{
+void RenderScreens::renderHowToPlayScreen() {
     RenderHelper::setRenderDrawColor(RenderColors::primary);
     SDL_RenderClear(globals.renderer);
 
@@ -72,8 +72,7 @@ void RenderScreens::renderHowToPlayScreen()
     // bombs
     SDL_Texture* basicTexture = TextureManager::getInstance().getTexture(
         Config::Textures::BASIC_OPPONENT, globals.renderer);
-    if (basicTexture)
-    {
+    if (basicTexture) {
         SDL_FRect imageRect = {static_cast<float>(x_start3), static_cast<float>(y_pos),
                                static_cast<float>(opponent_image_size),
                                static_cast<float>(opponent_image_size)};
@@ -92,8 +91,7 @@ void RenderScreens::renderHowToPlayScreen()
     // aggressive
     SDL_Texture* aggressiveTexture = TextureManager::getInstance().getTexture(
         Config::Textures::AGGRESSIVE_OPPONENT, globals.renderer);
-    if (aggressiveTexture)
-    {
+    if (aggressiveTexture) {
         SDL_FRect imageRect = {static_cast<float>(x_start3), static_cast<float>(y_pos),
                                static_cast<float>(opponent_image_size),
                                static_cast<float>(opponent_image_size)};
@@ -112,8 +110,7 @@ void RenderScreens::renderHowToPlayScreen()
     // sniper
     SDL_Texture* sniperTexture = TextureManager::getInstance().getTexture(
         Config::Textures::SNIPER_OPPONENT, globals.renderer);
-    if (sniperTexture)
-    {
+    if (sniperTexture) {
         SDL_FRect imageRect = {static_cast<float>(x_start3), static_cast<float>(y_pos),
                                static_cast<float>(opponent_image_size),
                                static_cast<float>(opponent_image_size)};
@@ -145,8 +142,7 @@ void RenderScreens::renderHowToPlayScreen()
     UIButtonRenderer::render(UIButtonPresets::close(globals.windowWidth));
 }
 
-void RenderScreens::renderGameOverScreen(const GameStateData& state)
-{
+void RenderScreens::renderGameOverScreen(const GameStateData& state) {
     RenderHelper::setRenderDrawColor(RenderColors::primary);
     SDL_RenderClear(globals.renderer);
 
@@ -160,8 +156,7 @@ void RenderScreens::renderGameOverScreen(const GameStateData& state)
     UIButtonRenderer::render(UIButtonPresets::close(globals.windowWidth));
 }
 
-void RenderScreens::renderHighScoreEntryScreen(const GameStateData& state)
-{
+void RenderScreens::renderHighScoreEntryScreen(const GameStateData& state) {
     RenderHelper::setRenderDrawColor(RenderColors::primary);
     SDL_RenderClear(globals.renderer);
     RenderHelper::renderText("NEW HIGH SCORE!", globals.windowWidth / 2 - 175,
@@ -183,8 +178,7 @@ void RenderScreens::renderHighScoreEntryScreen(const GameStateData& state)
     UIButtonRenderer::render(UIButtonPresets::close(globals.windowWidth));
 }
 
-void RenderScreens::renderViewHighScoresScreen(const GameStateData& state)
-{
+void RenderScreens::renderViewHighScoresScreen(const GameStateData& state) {
     RenderHelper::setRenderDrawColor(RenderColors::primary);
     SDL_RenderClear(globals.renderer);
 
@@ -204,8 +198,7 @@ void RenderScreens::renderViewHighScoresScreen(const GameStateData& state)
                              RenderColors::textPrimary, FontSize::LARGE);
 
     int currentY = listStartY;
-    for (int i = 0; i < static_cast<int>(state.highScores.size()); ++i)
-    {
+    for (int i = 0; i < static_cast<int>(state.highScores.size()); ++i) {
         const auto& entry = state.highScores[i];
         std::string rankStr =
             std::to_string(i + 1) + ". " + entry.name + " - " + std::to_string(entry.score);
@@ -214,8 +207,7 @@ void RenderScreens::renderViewHighScoresScreen(const GameStateData& state)
         currentY += 40;
     }
 
-    if (state.highScores.empty())
-    {
+    if (state.highScores.empty()) {
         RenderHelper::renderText("NO HIGH SCORES YET", globals.windowWidth / 2 - 140, currentY,
                                  RenderColors::textSecondary, FontSize::MEDIUM);
     }

@@ -4,19 +4,16 @@
 #include <string>
 #include <unordered_map>
 struct SDL_Texture;
-struct SDL_Texture_Deleter
-{
-    void operator()(SDL_Texture* texture) const
-    {
-        if (texture)
-        {
+
+struct SDL_Texture_Deleter {
+    void operator()(SDL_Texture* texture) const {
+        if (texture) {
             SDL_DestroyTexture(texture);
         }
     }
 };
 
-class TextureManager
-{
+class TextureManager {
   public:
     // enforce singleton
     TextureManager(const TextureManager&) = delete;

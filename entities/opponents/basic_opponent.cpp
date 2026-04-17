@@ -1,7 +1,7 @@
 #include <cmath>
 #include <entities/opponents/basic_opponent.h>
-BasicOpponent::BasicOpponent(float x, float y, float w, float h) : BaseOpponent(x, y, w, h)
-{
+
+BasicOpponent::BasicOpponent(float x, float y, float w, float h) : BaseOpponent(x, y, w, h) {
     m_speed = 30.0f;
     m_angularSpeed = 1.5f;
     m_oscillationAmplitude = 80.0f;
@@ -24,8 +24,7 @@ BasicOpponent::BasicOpponent(float x, float y, float w, float h) : BaseOpponent(
 
 void BasicOpponent::update(float deltaTime, [[maybe_unused]] const SDL_FPoint& playerPos,
                            [[maybe_unused]] float cameraX,
-                           [[maybe_unused]] Random::RngEngine& simRng)
-{
+                           [[maybe_unused]] Random::RngEngine& simRng) {
     if (m_health <= 0)
         return;
 

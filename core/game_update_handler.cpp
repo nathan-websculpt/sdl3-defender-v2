@@ -1,15 +1,16 @@
 #include <algorithm>
-#include <core/config.h>
-#include <core/game.h>
-#include <core/globals.h>
-#include <core/helpers_game/colony_update_and_prune.h>
 #include <entities/health_item.h>
 #include <entities/opponents/aggressive_opponent.h>
 #include <entities/opponents/basic_opponent.h>
 #include <entities/opponents/sniper_opponent.h>
 #include <numbers>
-void Game::updatePlayerAndProjectiles(float deltaTime)
-{
+
+#include <core/config.h>
+#include <core/game.h>
+#include <core/globals.h>
+#include <core/helpers_game/colony_update_and_prune.h>
+
+void Game::updatePlayerAndProjectiles(float deltaTime) {
     if (!m_state.player)
         return;
 
@@ -20,19 +21,15 @@ void Game::updatePlayerAndProjectiles(float deltaTime)
     ColonyUpdateAndPrune::projectiles(playerProjectiles, deltaTime, m_gameHelpers);
 }
 
-bool Game::updateOpponents(float deltaTime, const SDL_FRect& playerBounds)
-{
-    for (auto opp_iter = m_state.opponents.begin(); opp_iter != m_state.opponents.end();)
-    {
+bool Game::updateOpponents(float deltaTime, const SDL_FRect& playerBounds) {
+    for (auto opp_iter = m_state.opponents.begin(); opp_iter != m_state.opponents.end();) {
         auto& oppPtr = *opp_iter;
-        if (!oppPtr)
-        {
+        if (!oppPtr) {
             opp_iter = m_state.opponents.erase(opp_iter);
             continue;
         }
 
-        if (oppPtr->isAlive())
-        {
+        if (oppPtr->isAlive()) {
             SDL_FPoint playerPos = {playerBounds.x, playerBounds.y};
             oppPtr->update(deltaTime, playerPos, m_state.cameraX, m_rng.simEngine);
             ColonyUpdateAndPrune::projectiles(oppPtr->getProjectiles(), deltaTime, m_gameHelpers);
@@ -42,13 +39,10 @@ bool Game::updateOpponents(float deltaTime, const SDL_FRect& playerBounds)
         SDL_FRect opplayerBoundsounds = oppPtr->getBounds();
         float oppCenterX = opplayerBoundsounds.x + opplayerBoundsounds.w / 2.0f;
         float groundY = m_gameHelpers.getGroundYAt(oppCenterX);
-        if (opplayerBoundsounds.y + opplayerBoundsounds.h >= groundY)
-        {
-            if (oppPtr->damagesWorldOnGroundImpact())
-            { // only basic opponents damage world
+        if (opplayerBoundsounds.y + opplayerBoundsounds.h >= groundY) {
+            if (oppPtr->damagesWorldOnGroundImpact()) { // only basic opponents damage world
                 m_state.worldHealth--;
-                if (m_state.worldHealth <= 0)
-                {
+                if (m_state.worldHealth <= 0) {
                     // world health too low; game over
                     return false; // report game-over to top-level update
                 }
@@ -60,8 +54,7 @@ bool Game::updateOpponents(float deltaTime, const SDL_FRect& playerBounds)
             continue;
         }
 
-        if (!oppPtr->isAlive())
-        {
+        if (!oppPtr->isAlive()) {
             opp_iter = m_state.opponents.erase(opp_iter);
             continue;
         }
@@ -71,46 +64,39 @@ bool Game::updateOpponents(float deltaTime, const SDL_FRect& playerBounds)
     return true;
 }
 
-void Game::handleSpawnsAndTimers(SecondsF deltaTime)
-{
+void Game::handleSpawnsAndTimers(SecondsF deltaTime) {
     m_playerHealthItemSpawnTimer += deltaTime;
-    while (m_playerHealthItemSpawnTimer >= PLAYER_HEALTH_ITEM_SPAWN_INTERVAL)
-    {
+    while (m_playerHealthItemSpawnTimer >= PLAYER_HEALTH_ITEM_SPAWN_INTERVAL) {
         spawnHealthItem(HealthItemType::PLAYER);
         m_playerHealthItemSpawnTimer -= PLAYER_HEALTH_ITEM_SPAWN_INTERVAL;
     }
 
     m_worldHealthItemSpawnTimer += deltaTime;
-    while (m_worldHealthItemSpawnTimer >= WORLD_HEALTH_ITEM_SPAWN_INTERVAL)
-    {
+    while (m_worldHealthItemSpawnTimer >= WORLD_HEALTH_ITEM_SPAWN_INTERVAL) {
         spawnHealthItem(HealthItemType::WORLD);
         m_worldHealthItemSpawnTimer -= WORLD_HEALTH_ITEM_SPAWN_INTERVAL;
     }
 
     m_opponentSpawnTimer += deltaTime;
-    while (m_opponentSpawnTimer >= OPPONENT_SPAWN_INTERVAL)
-    {
+    while (m_opponentSpawnTimer >= OPPONENT_SPAWN_INTERVAL) {
         spawnOpponent();
         m_opponentSpawnTimer -= OPPONENT_SPAWN_INTERVAL;
     }
 }
 
-void Game::spawnOpponent()
-{
+void Game::spawnOpponent() {
     const int type = Random::randomIntInclusive(m_rng.simEngine, 0, 2);
     const int maxSpawnX = std::max(0, Config::Game::WORLD_WIDTH - 51);
     const float x = static_cast<float>(Random::randomIntInclusive(m_rng.simEngine, 0, maxSpawnX));
     float y = -50.0f;
-    switch (type)
-    {
+    switch (type) {
     case 0:
         m_state.opponents.emplace(std::make_unique<BasicOpponent>(x, y, 40.0f, 40.0f));
         break;
     case 1:
         m_state.opponents.emplace(std::make_unique<AggressiveOpponent>(x, y, 45.0f, 45.0f));
         break;
-    case 2:
-    {
+    case 2: {
         const float offset =
             Random::randomFloatRange(m_rng.simEngine, 0.0f, 2.0f * std::numbers::pi_v<float>);
         m_state.opponents.emplace(std::make_unique<SniperOpponent>(x, y, 35.0f, 35.0f, offset));
@@ -119,8 +105,7 @@ void Game::spawnOpponent()
     }
 }
 
-void Game::spawnHealthItem(HealthItemType type)
-{
+void Game::spawnHealthItem(HealthItemType type) {
     const int maxSpawnX = std::max(0, Config::Game::WORLD_WIDTH - 51);
     const float x = static_cast<float>(Random::randomIntInclusive(m_rng.simEngine, 0, maxSpawnX));
     float y = -50.0f; // start from top

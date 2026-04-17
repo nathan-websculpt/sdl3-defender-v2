@@ -7,23 +7,19 @@ struct MIX_Audio;
 struct MIX_Mixer;
 struct MIX_Track;
 
-struct MIX_Audio_Deleter
-{
+struct MIX_Audio_Deleter {
     void operator()(MIX_Audio* audio) const;
 };
 
-struct MIX_Mixer_Deleter
-{
+struct MIX_Mixer_Deleter {
     void operator()(MIX_Mixer* mixer) const;
 };
 
-struct MIX_Track_Deleter
-{
+struct MIX_Track_Deleter {
     void operator()(MIX_Track* track) const;
 };
 
-class SoundManager
-{
+class SoundManager {
   public:
     SoundManager(const SoundManager&) = delete;
     SoundManager& operator=(const SoundManager&) = delete;

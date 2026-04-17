@@ -1,30 +1,29 @@
 #include <algorithm>
 #include <cmath>
-#include <core/game.h>
-#include <core/game_state_data.h>
-#include <core/ui/ui_button.h>
 #include <entities/health_item.h>
 #include <entities/opponents/basic_opponent.h>
 #include <entities/opponents/sniper_opponent.h>
 #include <gtest/gtest.h>
 #include <string>
 #include <tests/test_support.h>
+
+#include <core/game.h>
+#include <core/game_state_data.h>
+#include <core/ui/ui_button.h>
 using TestSupport::GlobalStateFixture;
 
-namespace
-{
+namespace {
 
 std::size_t countHealthItemsOfType(const plf::colony<std::unique_ptr<HealthItem>>& items,
-                                   HealthItemType type)
-{
+                                   HealthItemType type) {
     const auto matchCount =
-        std::ranges::count_if(items, [type](const std::unique_ptr<HealthItem>& item)
-                              { return item && item->getType() == type; });
+        std::ranges::count_if(items, [type](const std::unique_ptr<HealthItem>& item) {
+            return item && item->getType() == type;
+        });
     return static_cast<std::size_t>(matchCount);
 }
 
-GameInput makeMouseClickAt(int x, int y)
-{
+GameInput makeMouseClickAt(int x, int y) {
     GameInput input{};
     input.mouseClick = true;
     input.mouseX = x;
@@ -32,16 +31,14 @@ GameInput makeMouseClickAt(int x, int y)
     return input;
 }
 
-GameInput makeMouseClickAtCenter(const SDL_FRect& rect)
-{
+GameInput makeMouseClickAtCenter(const SDL_FRect& rect) {
     const int centerX = static_cast<int>(rect.x + (rect.w * 0.5f));
     const int centerY = static_cast<int>(rect.y + (rect.h * 0.5f));
     return makeMouseClickAt(centerX, centerY);
 }
 
 void prepareHighScoreSubmissionState(Game& game, const std::string& nameInput,
-                                     int playerScore = 1234)
-{
+                                     int playerScore = 1234) {
     auto& state = game.getState();
     state.state = GameStateData::State::GAME_OVER;
     state.waitingForHighScore = true;
@@ -51,35 +48,30 @@ void prepareHighScoreSubmissionState(Game& game, const std::string& nameInput,
     state.highScores.clear();
 }
 
-std::string submittedNameAfterInput(Game& game, const GameInput& input)
-{
+std::string submittedNameAfterInput(Game& game, const GameInput& input) {
     auto& state = game.getState();
     game.handleInput(input, SecondsF{1.0f / 60.0f});
     EXPECT_EQ(state.state, GameStateData::State::MENU);
     EXPECT_FALSE(state.waitingForHighScore);
     EXPECT_FALSE(state.highScores.empty());
-    if (state.highScores.empty())
-    {
+    if (state.highScores.empty()) {
         return {};
     }
     return state.highScores.front().name;
 }
 
-class TestSniperOpponent final : public SniperOpponent
-{
+class TestSniperOpponent final : public SniperOpponent {
   public:
     using SniperOpponent::SniperOpponent;
 
-    void setFireTimer(float value)
-    {
+    void setFireTimer(float value) {
         m_fireTimer = value;
     }
 };
 
 } // namespace
 
-TEST_F(GlobalStateFixture, gameStateDataDefaultScalarStateIsInitialized)
-{
+TEST_F(GlobalStateFixture, gameStateDataDefaultScalarStateIsInitialized) {
     GameStateData state{};
 
     EXPECT_EQ(state.worldHealth, 0);
@@ -87,8 +79,7 @@ TEST_F(GlobalStateFixture, gameStateDataDefaultScalarStateIsInitialized)
     EXPECT_FLOAT_EQ(state.cameraX, 0.0f);
 }
 
-TEST_F(GlobalStateFixture, escapeInMenuStopsGameLoop)
-{
+TEST_F(GlobalStateFixture, escapeInMenuStopsGameLoop) {
     Game game(101U);
     GameInput input{};
     input.escape = true;
@@ -97,8 +88,7 @@ TEST_F(GlobalStateFixture, escapeInMenuStopsGameLoop)
     EXPECT_FALSE(game.getState().running);
 }
 
-TEST_F(GlobalStateFixture, enterInMenuStartsNewGame)
-{
+TEST_F(GlobalStateFixture, enterInMenuStartsNewGame) {
     Game game(102U);
     GameInput input{};
     input.enter = true;
@@ -112,8 +102,7 @@ TEST_F(GlobalStateFixture, enterInMenuStartsNewGame)
     EXPECT_EQ(state.playerScore, 0);
 }
 
-TEST_F(GlobalStateFixture, escapeWhilePlayingReturnsToMenu)
-{
+TEST_F(GlobalStateFixture, escapeWhilePlayingReturnsToMenu) {
     Game game(103U);
     game.startNewGame();
     ASSERT_EQ(game.getState().state, GameStateData::State::PLAYING);
@@ -125,8 +114,7 @@ TEST_F(GlobalStateFixture, escapeWhilePlayingReturnsToMenu)
     EXPECT_EQ(game.getState().state, GameStateData::State::MENU);
 }
 
-TEST_F(GlobalStateFixture, menuMouseClickCanOpenHowToPlay)
-{
+TEST_F(GlobalStateFixture, menuMouseClickCanOpenHowToPlay) {
     Game game(104U);
     GameInput input{};
     input.mouseClick = true;
@@ -137,8 +125,7 @@ TEST_F(GlobalStateFixture, menuMouseClickCanOpenHowToPlay)
     EXPECT_EQ(game.getState().state, GameStateData::State::HOW_TO_PLAY);
 }
 
-TEST_F(GlobalStateFixture, mainMenuLayoutMatchesLegacyGeometry)
-{
+TEST_F(GlobalStateFixture, mainMenuLayoutMatchesLegacyGeometry) {
     const SDL_FRect play = UIButtonLayout::mainMenuButtonRect(1000, 800, MainMenuButtonId::Play);
     const SDL_FRect howToPlay =
         UIButtonLayout::mainMenuButtonRect(1000, 800, MainMenuButtonId::HowToPlay);
@@ -167,8 +154,7 @@ TEST_F(GlobalStateFixture, mainMenuLayoutMatchesLegacyGeometry)
     EXPECT_FLOAT_EQ(exit.h, 50.0f);
 }
 
-TEST_F(GlobalStateFixture, closeLayoutMatchesLegacyGeometry)
-{
+TEST_F(GlobalStateFixture, closeLayoutMatchesLegacyGeometry) {
     const SDL_FRect close = UIButtonLayout::closeButtonRect(1000);
 
     EXPECT_FLOAT_EQ(close.x, 970.0f);
@@ -177,8 +163,7 @@ TEST_F(GlobalStateFixture, closeLayoutMatchesLegacyGeometry)
     EXPECT_FLOAT_EQ(close.h, 20.0f);
 }
 
-TEST_F(GlobalStateFixture, uiPointInRectUsesInclusiveExclusiveBounds)
-{
+TEST_F(GlobalStateFixture, uiPointInRectUsesInclusiveExclusiveBounds) {
     const SDL_FRect close = UIButtonLayout::closeButtonRect(1000);
 
     EXPECT_TRUE(uiPointInRect(970, 10, close));
@@ -190,8 +175,7 @@ TEST_F(GlobalStateFixture, uiPointInRectUsesInclusiveExclusiveBounds)
     EXPECT_FALSE(uiPointInRect(970, 30, close));
 }
 
-TEST_F(GlobalStateFixture, menuMouseClickCanStartGame)
-{
+TEST_F(GlobalStateFixture, menuMouseClickCanStartGame) {
     Game game(115U);
     const SDL_FRect play = UIButtonLayout::mainMenuButtonRect(
         globals.windowWidth, globals.windowHeight, MainMenuButtonId::Play);
@@ -201,8 +185,7 @@ TEST_F(GlobalStateFixture, menuMouseClickCanStartGame)
     EXPECT_EQ(game.getState().state, GameStateData::State::PLAYING);
 }
 
-TEST_F(GlobalStateFixture, menuMouseClickCanOpenHighScores)
-{
+TEST_F(GlobalStateFixture, menuMouseClickCanOpenHighScores) {
     Game game(116U);
     const SDL_FRect highScores = UIButtonLayout::mainMenuButtonRect(
         globals.windowWidth, globals.windowHeight, MainMenuButtonId::HighScores);
@@ -212,8 +195,7 @@ TEST_F(GlobalStateFixture, menuMouseClickCanOpenHighScores)
     EXPECT_EQ(game.getState().state, GameStateData::State::VIEW_HIGH_SCORES);
 }
 
-TEST_F(GlobalStateFixture, menuMouseClickCanExitGameLoop)
-{
+TEST_F(GlobalStateFixture, menuMouseClickCanExitGameLoop) {
     Game game(117U);
     const SDL_FRect exit = UIButtonLayout::mainMenuButtonRect(
         globals.windowWidth, globals.windowHeight, MainMenuButtonId::Exit);
@@ -223,8 +205,7 @@ TEST_F(GlobalStateFixture, menuMouseClickCanExitGameLoop)
     EXPECT_FALSE(game.getState().running);
 }
 
-TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromHowToPlay)
-{
+TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromHowToPlay) {
     Game game(118U);
     game.getState().state = GameStateData::State::HOW_TO_PLAY;
     const SDL_FRect close = UIButtonLayout::closeButtonRect(globals.windowWidth);
@@ -234,8 +215,7 @@ TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromHowToPlay)
     EXPECT_EQ(game.getState().state, GameStateData::State::MENU);
 }
 
-TEST_F(GlobalStateFixture, closeClickOutsideDoesNotReturnToMenuFromHowToPlay)
-{
+TEST_F(GlobalStateFixture, closeClickOutsideDoesNotReturnToMenuFromHowToPlay) {
     Game game(119U);
     game.getState().state = GameStateData::State::HOW_TO_PLAY;
     const SDL_FRect close = UIButtonLayout::closeButtonRect(globals.windowWidth);
@@ -246,8 +226,7 @@ TEST_F(GlobalStateFixture, closeClickOutsideDoesNotReturnToMenuFromHowToPlay)
     EXPECT_EQ(game.getState().state, GameStateData::State::HOW_TO_PLAY);
 }
 
-TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromViewHighScores)
-{
+TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromViewHighScores) {
     Game game(120U);
     game.getState().state = GameStateData::State::VIEW_HIGH_SCORES;
     const SDL_FRect close = UIButtonLayout::closeButtonRect(globals.windowWidth);
@@ -257,8 +236,7 @@ TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromViewHighScores)
     EXPECT_EQ(game.getState().state, GameStateData::State::MENU);
 }
 
-TEST_F(GlobalStateFixture, viewHighScoresDoesNotFallThroughToPlayingInput)
-{
+TEST_F(GlobalStateFixture, viewHighScoresDoesNotFallThroughToPlayingInput) {
     Game game(122U);
     game.startNewGame();
     auto& state = game.getState();
@@ -276,8 +254,7 @@ TEST_F(GlobalStateFixture, viewHighScoresDoesNotFallThroughToPlayingInput)
     EXPECT_FLOAT_EQ(after.y, before.y);
 }
 
-TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromGameOver)
-{
+TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromGameOver) {
     Game game(121U);
     auto& state = game.getState();
     state.state = GameStateData::State::GAME_OVER;
@@ -289,8 +266,7 @@ TEST_F(GlobalStateFixture, closeClickInsideReturnsToMenuFromGameOver)
     EXPECT_EQ(game.getState().state, GameStateData::State::MENU);
 }
 
-TEST_F(GlobalStateFixture, enterInHowToPlayReturnsToMenu)
-{
+TEST_F(GlobalStateFixture, enterInHowToPlayReturnsToMenu) {
     Game game(105U);
     game.getState().state = GameStateData::State::HOW_TO_PLAY;
 
@@ -301,8 +277,7 @@ TEST_F(GlobalStateFixture, enterInHowToPlayReturnsToMenu)
     EXPECT_EQ(game.getState().state, GameStateData::State::MENU);
 }
 
-TEST_F(GlobalStateFixture, updateIsNoOpWhenNotPlaying)
-{
+TEST_F(GlobalStateFixture, updateIsNoOpWhenNotPlaying) {
     Game game(106U);
     auto& state = game.getState();
 
@@ -329,8 +304,7 @@ TEST_F(GlobalStateFixture, updateIsNoOpWhenNotPlaying)
     EXPECT_FLOAT_EQ(afterPlayerBounds.y, beforePlayerBounds.y);
 }
 
-TEST_F(GlobalStateFixture, updateWithMissingPlayerFailsSafeToMenuInRelease)
-{
+TEST_F(GlobalStateFixture, updateWithMissingPlayerFailsSafeToMenuInRelease) {
 #ifndef NDEBUG
     GTEST_SKIP() << "debug build intentionally asserts on missing player";
 #else
@@ -347,8 +321,7 @@ TEST_F(GlobalStateFixture, updateWithMissingPlayerFailsSafeToMenuInRelease)
 #endif
 }
 
-TEST_F(GlobalStateFixture, updateCameraClampsAtWorldBounds)
-{
+TEST_F(GlobalStateFixture, updateCameraClampsAtWorldBounds) {
     Game game(107U);
     game.startNewGame();
     auto& state = game.getState();
@@ -364,8 +337,7 @@ TEST_F(GlobalStateFixture, updateCameraClampsAtWorldBounds)
                     static_cast<float>(Config::Game::WORLD_WIDTH - globals.windowWidth));
 }
 
-TEST_F(GlobalStateFixture, updateCameraRemainsNonNegativeWhenViewportExceedsWorldWidth)
-{
+TEST_F(GlobalStateFixture, updateCameraRemainsNonNegativeWhenViewportExceedsWorldWidth) {
     Game game(123U);
     game.startNewGame();
     auto& state = game.getState();
@@ -377,8 +349,7 @@ TEST_F(GlobalStateFixture, updateCameraRemainsNonNegativeWhenViewportExceedsWorl
     EXPECT_FLOAT_EQ(state.cameraX, 0.0f);
 }
 
-TEST_F(GlobalStateFixture, opponentSpawnTimerProgressesDeterministically)
-{
+TEST_F(GlobalStateFixture, opponentSpawnTimerProgressesDeterministically) {
     Game game(108U);
     game.startNewGame();
     auto& state = game.getState();
@@ -391,8 +362,7 @@ TEST_F(GlobalStateFixture, opponentSpawnTimerProgressesDeterministically)
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 1u);
 }
 
-TEST_F(GlobalStateFixture, opponentSpawnTimerPreservesOvershootRemainder)
-{
+TEST_F(GlobalStateFixture, opponentSpawnTimerPreservesOvershootRemainder) {
     Game game(124U);
     game.startNewGame();
     auto& state = game.getState();
@@ -406,8 +376,7 @@ TEST_F(GlobalStateFixture, opponentSpawnTimerPreservesOvershootRemainder)
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 1u);
 }
 
-TEST_F(GlobalStateFixture, opponentSpawnTimerCatchesUpAcrossMultipleIntervals)
-{
+TEST_F(GlobalStateFixture, opponentSpawnTimerCatchesUpAcrossMultipleIntervals) {
     Game game(125U);
     game.startNewGame();
     auto& state = game.getState();
@@ -417,8 +386,7 @@ TEST_F(GlobalStateFixture, opponentSpawnTimerCatchesUpAcrossMultipleIntervals)
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 2u);
 }
 
-TEST_F(GlobalStateFixture, opponentVisibilityUsesCurrentFrameCameraForFiring)
-{
+TEST_F(GlobalStateFixture, opponentVisibilityUsesCurrentFrameCameraForFiring) {
     Game game(126U);
     game.startNewGame();
     auto& state = game.getState();
@@ -439,8 +407,7 @@ TEST_F(GlobalStateFixture, opponentVisibilityUsesCurrentFrameCameraForFiring)
     EXPECT_GT(TestSupport::colonySize(sniperPtr->getProjectiles()), 0u);
 }
 
-TEST_F(GlobalStateFixture, playerHealthItemSpawnTimerProgressesDeterministically)
-{
+TEST_F(GlobalStateFixture, playerHealthItemSpawnTimerProgressesDeterministically) {
     Game game(109U);
     game.startNewGame();
     auto& state = game.getState();
@@ -453,8 +420,7 @@ TEST_F(GlobalStateFixture, playerHealthItemSpawnTimerProgressesDeterministically
     EXPECT_EQ(countHealthItemsOfType(state.healthItems, HealthItemType::PLAYER), 1u);
 }
 
-TEST_F(GlobalStateFixture, worldHealthItemSpawnTimerProgressesDeterministically)
-{
+TEST_F(GlobalStateFixture, worldHealthItemSpawnTimerProgressesDeterministically) {
     Game game(110U);
     game.startNewGame();
     auto& state = game.getState();
@@ -467,8 +433,7 @@ TEST_F(GlobalStateFixture, worldHealthItemSpawnTimerProgressesDeterministically)
     EXPECT_EQ(countHealthItemsOfType(state.healthItems, HealthItemType::WORLD), 1u);
 }
 
-TEST_F(GlobalStateFixture, updateRecomputesLandscapeAfterWindowResize)
-{
+TEST_F(GlobalStateFixture, updateRecomputesLandscapeAfterWindowResize) {
     Game game(111U);
     game.startNewGame();
     auto& state = game.getState();
@@ -494,8 +459,7 @@ TEST_F(GlobalStateFixture, updateRecomputesLandscapeAfterWindowResize)
     EXPECT_FLOAT_EQ(state.landscape.back().y, -39.0f);
 }
 
-TEST_F(GlobalStateFixture, gameOverAcceptsValidCharactersAndRejectsInvalidOnes)
-{
+TEST_F(GlobalStateFixture, gameOverAcceptsValidCharactersAndRejectsInvalidOnes) {
     Game game(112U);
     auto& state = game.getState();
     state.state = GameStateData::State::GAME_OVER;
@@ -524,8 +488,7 @@ TEST_F(GlobalStateFixture, gameOverAcceptsValidCharactersAndRejectsInvalidOnes)
     EXPECT_TRUE(state.waitingForHighScore);
 }
 
-TEST_F(GlobalStateFixture, gameOverSubmissionPathsTrimNamesIdentically)
-{
+TEST_F(GlobalStateFixture, gameOverSubmissionPathsTrimNamesIdentically) {
     Game enterGame(127U);
     prepareHighScoreSubmissionState(enterGame, " \tAce\t ");
     GameInput enterInput{};
@@ -549,8 +512,7 @@ TEST_F(GlobalStateFixture, gameOverSubmissionPathsTrimNamesIdentically)
     EXPECT_EQ(closeName, "Ace");
 }
 
-TEST_F(GlobalStateFixture, gameOverSubmissionPathsApplyAnonFallbackIdentically)
-{
+TEST_F(GlobalStateFixture, gameOverSubmissionPathsApplyAnonFallbackIdentically) {
     Game enterGame(130U);
     prepareHighScoreSubmissionState(enterGame, " \t ");
     GameInput enterInput{};
@@ -574,8 +536,7 @@ TEST_F(GlobalStateFixture, gameOverSubmissionPathsApplyAnonFallbackIdentically)
     EXPECT_EQ(closeName, "ANON");
 }
 
-TEST_F(GlobalStateFixture, gameOverNameInputRespectsMaxLength)
-{
+TEST_F(GlobalStateFixture, gameOverNameInputRespectsMaxLength) {
     Game game(113U);
     auto& state = game.getState();
     state.state = GameStateData::State::GAME_OVER;
@@ -594,8 +555,7 @@ TEST_F(GlobalStateFixture, gameOverNameInputRespectsMaxLength)
     EXPECT_EQ(state.highScoreIndex, 2);
 }
 
-TEST_F(GlobalStateFixture, gameOverBackspaceCooldownUsesDeltaTime)
-{
+TEST_F(GlobalStateFixture, gameOverBackspaceCooldownUsesDeltaTime) {
     Game game(114U);
     auto& state = game.getState();
     state.state = GameStateData::State::GAME_OVER;

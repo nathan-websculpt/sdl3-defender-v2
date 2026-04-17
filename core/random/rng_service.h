@@ -2,21 +2,19 @@
 
 #include <cstdint>
 #include <random>
-namespace Random
-{
+
+namespace Random {
 
 using RngEngine = std::mt19937;
 using ValidationLogHook = void (*)(const char* message);
 
-struct SeedSet
-{
+struct SeedSet {
     std::uint64_t baseSeed = 0;
     std::uint64_t simSeed = 0;
     std::uint64_t fxSeed = 0;
 };
 
-struct RngStreams
-{
+struct RngStreams {
     SeedSet seeds{};
     RngEngine simEngine{};
     RngEngine fxEngine{};

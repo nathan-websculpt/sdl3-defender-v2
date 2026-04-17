@@ -7,8 +7,7 @@
 #include <tests/test_support.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, basicOpponentMovesDownAndOscillates)
-{
+TEST_F(GlobalStateFixture, basicOpponentMovesDownAndOscillates) {
     auto rng = Random::makeDeterministicStreams(11U);
 
     BasicOpponent opponent(100.0f, 50.0f, 40.0f, 40.0f);
@@ -21,8 +20,7 @@ TEST_F(GlobalStateFixture, basicOpponentMovesDownAndOscillates)
     EXPECT_NEAR(bounds.x, 100.0f + std::sin(1.5f) * 80.0f, 0.001f);
 }
 
-TEST_F(GlobalStateFixture, sniperOpponentFiresOnlyAfterIntervalWhenVisible)
-{
+TEST_F(GlobalStateFixture, sniperOpponentFiresOnlyAfterIntervalWhenVisible) {
     auto rng = Random::makeDeterministicStreams(12U);
 
     globals.windowWidth = 2000;
@@ -39,8 +37,7 @@ TEST_F(GlobalStateFixture, sniperOpponentFiresOnlyAfterIntervalWhenVisible)
     EXPECT_EQ(TestSupport::colonySize(opponent.getProjectiles()), 1u);
 }
 
-TEST_F(GlobalStateFixture, aggressiveOpponentChasesAndFiresOnCadence)
-{
+TEST_F(GlobalStateFixture, aggressiveOpponentChasesAndFiresOnCadence) {
     auto rng = Random::makeDeterministicStreams(13U);
 
     globals.windowWidth = 3000;
@@ -58,8 +55,7 @@ TEST_F(GlobalStateFixture, aggressiveOpponentChasesAndFiresOnCadence)
     EXPECT_EQ(TestSupport::colonySize(opponent.getProjectiles()), 1u);
 }
 
-TEST_F(GlobalStateFixture, sniperFiringVisibilityTracksWindowWidth_currentBehavior)
-{
+TEST_F(GlobalStateFixture, sniperFiringVisibilityTracksWindowWidth_currentBehavior) {
     auto rng = Random::makeDeterministicStreams(14U);
 
     SniperOpponent opponent(500.0f, 0.0f, 35.0f, 35.0f, 0.0f);
@@ -74,8 +70,7 @@ TEST_F(GlobalStateFixture, sniperFiringVisibilityTracksWindowWidth_currentBehavi
     EXPECT_EQ(TestSupport::colonySize(opponent.getProjectiles()), 1u);
 }
 
-TEST_F(GlobalStateFixture, basicOpponentExplosionUsesConfiguredSizeAndLifetime)
-{
+TEST_F(GlobalStateFixture, basicOpponentExplosionUsesConfiguredSizeAndLifetime) {
     auto rng = Random::makeDeterministicStreams(19U);
 
     BasicOpponent opponent(100.0f, 50.0f, 40.0f, 40.0f);

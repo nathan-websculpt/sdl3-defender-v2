@@ -5,8 +5,7 @@
 #include <tests/test_support.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, healthItemFallsBeforeBlinking)
-{
+TEST_F(GlobalStateFixture, healthItemFallsBeforeBlinking) {
     HealthItem item(10.0f, 0.0f, 30.0f, 30.0f, HealthItemType::PLAYER, "texture");
     const float initialY = item.getBounds().y;
 
@@ -17,8 +16,7 @@ TEST_F(GlobalStateFixture, healthItemFallsBeforeBlinking)
     EXPECT_FLOAT_EQ(item.getBlinkAlpha(), 255.0f);
 }
 
-TEST_F(GlobalStateFixture, blinkingAlphaTogglesAndEventuallyExpires)
-{
+TEST_F(GlobalStateFixture, blinkingAlphaTogglesAndEventuallyExpires) {
     HealthItem item(10.0f, 0.0f, 30.0f, 30.0f, HealthItemType::WORLD, "texture");
     item.startBlinking();
 
@@ -31,15 +29,13 @@ TEST_F(GlobalStateFixture, blinkingAlphaTogglesAndEventuallyExpires)
     item.update(HealthItem::BLINK_DURATION / 2.0f);
     EXPECT_FLOAT_EQ(item.getBlinkAlpha(), 255.0f);
 
-    for (int i = 0; i < 6; ++i)
-    {
+    for (int i = 0; i < 6; ++i) {
         item.update(HealthItem::BLINK_DURATION);
     }
     EXPECT_FALSE(item.isAlive());
 }
 
-TEST_F(GlobalStateFixture, blinkingAlphaRemainsValidAfterNonFiniteAndSpikeTimers)
-{
+TEST_F(GlobalStateFixture, blinkingAlphaRemainsValidAfterNonFiniteAndSpikeTimers) {
     HealthItem item(10.0f, 0.0f, 30.0f, 30.0f, HealthItemType::WORLD, "texture");
     item.startBlinking();
 

@@ -1,20 +1,16 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <core/config.h>
-#include <core/random/rng_service.h>
 #include <entities/particle.h>
 #include <entities/projectile.h>
 #include <memory>
 #include <plf/plf_colony.h>
 #include <vector>
-enum class Direction
-{
-    RIGHT,
-    LEFT
-};
 
-class Player
-{
+#include <core/config.h>
+#include <core/random/rng_service.h>
+enum class Direction { RIGHT, LEFT };
+
+class Player {
   public:
     Player(float x, float y, float w, float h);
     ~Player() = default;
@@ -29,44 +25,44 @@ class Player
     const plf::colony<Projectile>& getProjectiles() const;
 
     void shoot();
-    bool isAlive() const
-    {
+
+    bool isAlive() const {
         return m_health > 0;
     }
-    void takeDamage(int damage)
-    {
+
+    void takeDamage(int damage) {
         m_health -= damage;
         if (m_health < 0)
             m_health = 0;
     }
-    int getHealth() const
-    {
+
+    int getHealth() const {
         return m_health;
     }
-    int getMaxHealth() const
-    {
+
+    int getMaxHealth() const {
         return m_maxHealth;
     }
-    void restoreHealth()
-    {
+
+    void restoreHealth() {
         m_health = getMaxHealth();
     }
+
     void setSpeedBoost(bool active);
 
-    float getSpeed() const
-    {
+    float getSpeed() const {
         return m_speed;
     }
-    void setFacing(Direction dir)
-    {
+
+    void setFacing(Direction dir) {
         m_facing = dir;
     }
-    Direction getFacing() const
-    {
+
+    Direction getFacing() const {
         return m_facing;
     }
-    void moveBy(float dx, float dy)
-    {
+
+    void moveBy(float dx, float dy) {
         m_rect.x += dx;
         m_rect.y += dy;
     }

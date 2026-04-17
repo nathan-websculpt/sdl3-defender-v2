@@ -1,44 +1,40 @@
 #include <algorithm>
 #include <chrono>
-#include <core/game_state_data.h>
-#include <core/high_scores/high_scores.h>
 #include <filesystem>
 #include <fstream>
 #include <gtest/gtest.h>
 #include <string>
 #include <tests/test_support.h>
 #include <vector>
+
+#include <core/game_state_data.h>
+#include <core/high_scores/high_scores.h>
 using TestSupport::GlobalStateFixture;
 
-namespace
-{
+namespace {
 
-bool isSortedDescendingByScore(const std::vector<GameStateData::HighScore>& highScores)
-{
+bool isSortedDescendingByScore(const std::vector<GameStateData::HighScore>& highScores) {
     return std::is_sorted(highScores.begin(), highScores.end(),
-                          [](const GameStateData::HighScore& a, const GameStateData::HighScore& b)
-                          { return a.score > b.score; });
+                          [](const GameStateData::HighScore& a, const GameStateData::HighScore& b) {
+                              return a.score > b.score;
+                          });
 }
 
-std::vector<GameStateData::HighScore> makeOverfullUnsortedScores()
-{
+std::vector<GameStateData::HighScore> makeOverfullUnsortedScores() {
     return {{"S01", 100}, {"S02", 450}, {"S03", 300}, {"S04", 800}, {"S05", 700}, {"S06", 200},
             {"S07", 650}, {"S08", 500}, {"S09", 900}, {"S10", 50},  {"S11", 600}};
 }
 
-void writeFileText(const std::filesystem::path& filePath, const std::string& contents)
-{
+void writeFileText(const std::filesystem::path& filePath, const std::string& contents) {
     std::ofstream file(filePath, std::ios::trunc);
     ASSERT_TRUE(file.is_open());
     file << contents;
     ASSERT_TRUE(file.good());
 }
 
-class HighScorePersistenceFixture : public GlobalStateFixture
-{
+class HighScorePersistenceFixture : public GlobalStateFixture {
   protected:
-    void SetUp() override
-    {
+    void SetUp() override {
         GlobalStateFixture::SetUp();
         const auto uniqueSuffix =
             std::to_string(std::chrono::steady_clock::now().time_since_epoch().count());
@@ -47,14 +43,12 @@ class HighScorePersistenceFixture : public GlobalStateFixture
         std::filesystem::create_directories(m_testDir);
     }
 
-    void TearDown() override
-    {
+    void TearDown() override {
         std::error_code ec;
         std::filesystem::remove_all(m_testDir, ec);
     }
 
-    std::filesystem::path path(const std::string& name) const
-    {
+    std::filesystem::path path(const std::string& name) const {
         return m_testDir / std::filesystem::path(name);
     }
 
@@ -63,8 +57,7 @@ class HighScorePersistenceFixture : public GlobalStateFixture
 
 } // namespace
 
-TEST_F(HighScorePersistenceFixture, loadValidFileReplacesStateAndEnforcesOrderingAndCap)
-{
+TEST_F(HighScorePersistenceFixture, loadValidFileReplacesStateAndEnforcesOrderingAndCap) {
     const std::filesystem::path writablePath = path("valid_high_scores.txt");
     const std::filesystem::path bundledPath = path("unused_bundled.txt");
     writeFileText(
@@ -83,8 +76,7 @@ TEST_F(HighScorePersistenceFixture, loadValidFileReplacesStateAndEnforcesOrderin
     EXPECT_EQ(state.highScores.back().score, 100);
 }
 
-TEST_F(HighScorePersistenceFixture, loadMalformedFileKeepsExistingScoresAndPreservesInvariants)
-{
+TEST_F(HighScorePersistenceFixture, loadMalformedFileKeepsExistingScoresAndPreservesInvariants) {
     const std::filesystem::path writablePath = path("malformed_high_scores.txt");
     const std::filesystem::path bundledPath = path("missing_bundled.txt");
     writeFileText(writablePath, "AAA 100\nBROKEN_LINE\nBBB 200\n");
@@ -102,8 +94,7 @@ TEST_F(HighScorePersistenceFixture, loadMalformedFileKeepsExistingScoresAndPrese
     EXPECT_EQ(state.highScores[2].name, "LOW");
 }
 
-TEST_F(HighScorePersistenceFixture, missingFileDoesNotClearExistingScoresAndPreservesInvariants)
-{
+TEST_F(HighScorePersistenceFixture, missingFileDoesNotClearExistingScoresAndPreservesInvariants) {
     const std::filesystem::path writablePath = path("missing_writable.txt");
     const std::filesystem::path bundledPath = path("missing_bundled.txt");
 
@@ -120,8 +111,7 @@ TEST_F(HighScorePersistenceFixture, missingFileDoesNotClearExistingScoresAndPres
 }
 
 TEST_F(HighScorePersistenceFixture,
-       loadFailureFromNonFilePathKeepsExistingScoresAndPreservesInvariants)
-{
+       loadFailureFromNonFilePathKeepsExistingScoresAndPreservesInvariants) {
     const std::filesystem::path nonFilePath = path("non_file_path");
     std::filesystem::create_directories(nonFilePath);
 
@@ -138,8 +128,7 @@ TEST_F(HighScorePersistenceFixture,
     EXPECT_EQ(state.highScores[2].score, 10);
 }
 
-TEST_F(HighScorePersistenceFixture, saveFailureAfterSubmitKeepsInMemoryHighScoreListValid)
-{
+TEST_F(HighScorePersistenceFixture, saveFailureAfterSubmitKeepsInMemoryHighScoreListValid) {
     const std::filesystem::path nonFilePath = path("save_target_directory");
     std::filesystem::create_directories(nonFilePath);
 

@@ -2,8 +2,7 @@
 
 struct GameStateData;
 
-class RenderScreens
-{
+class RenderScreens {
   public:
     static void renderMainMenu();
     static void renderHowToPlayScreen();

@@ -1,8 +1,3 @@
-#include <core/game.h>
-#include <core/game_state_data.h>
-#include <core/helpers_game/collision_handler.h>
-#include <core/helpers_game/game_helper.h>
-#include <core/high_scores/high_scores.h>
 #include <entities/health_item.h>
 #include <entities/opponents/basic_opponent.h>
 #include <entities/opponents/sniper_opponent.h>
@@ -10,10 +5,15 @@
 #include <gtest/gtest.h>
 #include <limits>
 #include <tests/test_support.h>
+
+#include <core/game.h>
+#include <core/game_state_data.h>
+#include <core/helpers_game/collision_handler.h>
+#include <core/helpers_game/game_helper.h>
+#include <core/high_scores/high_scores.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, projectileCollisionAwardsScoreAndRemovesShot)
-{
+TEST_F(GlobalStateFixture, projectileCollisionAwardsScoreAndRemovesShot) {
     auto rng = Random::makeDeterministicStreams(1U);
 
     GameStateData state{};
@@ -43,8 +43,7 @@ TEST_F(GlobalStateFixture, projectileCollisionAwardsScoreAndRemovesShot)
     EXPECT_FALSE((*opponentIt)->isAlive());
 }
 
-TEST_F(GlobalStateFixture, projectileCollisionSaturatesScoreAtIntMax)
-{
+TEST_F(GlobalStateFixture, projectileCollisionSaturatesScoreAtIntMax) {
     auto rng = Random::makeDeterministicStreams(8U);
 
     GameStateData state{};
@@ -69,8 +68,7 @@ TEST_F(GlobalStateFixture, projectileCollisionSaturatesScoreAtIntMax)
     EXPECT_EQ(state.playerScore, std::numeric_limits<int>::max());
 }
 
-TEST_F(GlobalStateFixture, projectileCollisionAtBeamEdgeStillHitsWhenBoundsStraddleClipPoint)
-{
+TEST_F(GlobalStateFixture, projectileCollisionAtBeamEdgeStillHitsWhenBoundsStraddleClipPoint) {
     auto rng = Random::makeDeterministicStreams(9U);
 
     GameStateData state{};
@@ -100,8 +98,7 @@ TEST_F(GlobalStateFixture, projectileCollisionAtBeamEdgeStillHitsWhenBoundsStrad
     EXPECT_FALSE((*opponentIt)->isAlive());
 }
 
-TEST_F(GlobalStateFixture, playerHealthItemCollisionRestoresPlayerHealth)
-{
+TEST_F(GlobalStateFixture, playerHealthItemCollisionRestoresPlayerHealth) {
     auto rng = Random::makeDeterministicStreams(2U);
 
     GameStateData state{};
@@ -129,8 +126,7 @@ TEST_F(GlobalStateFixture, playerHealthItemCollisionRestoresPlayerHealth)
     EXPECT_EQ(TestSupport::colonySize(state.healthItems), 0u);
 }
 
-TEST_F(GlobalStateFixture, worldHealthItemCollisionRestoresWorldHealth)
-{
+TEST_F(GlobalStateFixture, worldHealthItemCollisionRestoresWorldHealth) {
     auto rng = Random::makeDeterministicStreams(3U);
 
     GameStateData state{};
@@ -156,8 +152,7 @@ TEST_F(GlobalStateFixture, worldHealthItemCollisionRestoresWorldHealth)
     EXPECT_EQ(TestSupport::colonySize(state.healthItems), 0u);
 }
 
-TEST_F(GlobalStateFixture, bodyCollisionCanKillPlayerAndReportGameOver)
-{
+TEST_F(GlobalStateFixture, bodyCollisionCanKillPlayerAndReportGameOver) {
     auto rng = Random::makeDeterministicStreams(4U);
 
     GameStateData state{};
@@ -195,8 +190,7 @@ TEST_F(GlobalStateFixture, bodyCollisionCanKillPlayerAndReportGameOver)
     EXPECT_EQ(TestSupport::colonySize(state.healthItems), 1u);
 }
 
-TEST_F(GlobalStateFixture, opponentProjectileCanKillPlayerAndEarlyReturnSkipsHealthItems)
-{
+TEST_F(GlobalStateFixture, opponentProjectileCanKillPlayerAndEarlyReturnSkipsHealthItems) {
     auto rng = Random::makeDeterministicStreams(5U);
 
     GameStateData state{};
@@ -240,8 +234,7 @@ TEST_F(GlobalStateFixture, opponentProjectileCanKillPlayerAndEarlyReturnSkipsHea
     EXPECT_EQ(TestSupport::colonySize(state.healthItems), 1u);
 }
 
-TEST_F(GlobalStateFixture, basicOpponentGroundContactReducesWorldHealth)
-{
+TEST_F(GlobalStateFixture, basicOpponentGroundContactReducesWorldHealth) {
     Game game(6U);
     game.startNewGame();
     auto& state = game.getState();
@@ -260,8 +253,7 @@ TEST_F(GlobalStateFixture, basicOpponentGroundContactReducesWorldHealth)
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 0u);
 }
 
-TEST_F(GlobalStateFixture, nonBasicGroundContactDoesNotReduceWorldHealth)
-{
+TEST_F(GlobalStateFixture, nonBasicGroundContactDoesNotReduceWorldHealth) {
     Game game(19U);
     game.startNewGame();
     auto& state = game.getState();
@@ -280,8 +272,7 @@ TEST_F(GlobalStateFixture, nonBasicGroundContactDoesNotReduceWorldHealth)
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 0u);
 }
 
-TEST_F(GlobalStateFixture, basicOpponentGroundContactAtThresholdTriggersGameOver)
-{
+TEST_F(GlobalStateFixture, basicOpponentGroundContactAtThresholdTriggersGameOver) {
     Game game(7U);
     game.startNewGame();
     auto& state = game.getState();
@@ -310,8 +301,7 @@ TEST_F(GlobalStateFixture, basicOpponentGroundContactAtThresholdTriggersGameOver
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 1u);
 }
 
-TEST_F(GlobalStateFixture, collisionTriggeredPlayerDeathTransitionsAtTopLevelUpdate)
-{
+TEST_F(GlobalStateFixture, collisionTriggeredPlayerDeathTransitionsAtTopLevelUpdate) {
     Game game(20U);
     game.startNewGame();
     auto& state = game.getState();
@@ -344,8 +334,7 @@ TEST_F(GlobalStateFixture, collisionTriggeredPlayerDeathTransitionsAtTopLevelUpd
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 0u);
 }
 
-TEST_F(GlobalStateFixture, staleBoundsAfterClamp_usesPostClampPlayerBounds)
-{
+TEST_F(GlobalStateFixture, staleBoundsAfterClamp_usesPostClampPlayerBounds) {
     Game game(14U);
     game.startNewGame();
     auto& state = game.getState();
@@ -369,8 +358,7 @@ TEST_F(GlobalStateFixture, staleBoundsAfterClamp_usesPostClampPlayerBounds)
     EXPECT_EQ(state.player->getHealth(), healthBefore);
 }
 
-TEST_F(GlobalStateFixture, expiredProjectileIsRemovedBeforeCollisionPhase)
-{
+TEST_F(GlobalStateFixture, expiredProjectileIsRemovedBeforeCollisionPhase) {
     Game game(21U);
     game.startNewGame();
     auto& state = game.getState();
@@ -394,8 +382,7 @@ TEST_F(GlobalStateFixture, expiredProjectileIsRemovedBeforeCollisionPhase)
     EXPECT_TRUE((*opponentIt)->isAlive());
 }
 
-TEST_F(GlobalStateFixture, projectileKill_lifecycleScoreExplodeOnce_removeNextUpdate)
-{
+TEST_F(GlobalStateFixture, projectileKill_lifecycleScoreExplodeOnce_removeNextUpdate) {
     Game game(15U);
     game.startNewGame();
     auto& state = game.getState();
@@ -428,8 +415,7 @@ TEST_F(GlobalStateFixture, projectileKill_lifecycleScoreExplodeOnce_removeNextUp
     EXPECT_EQ(particlesAfterSecondUpdate, particlesAfterFirstUpdate + 1u);
 }
 
-TEST_F(GlobalStateFixture, deathPath_projectileKill_preservesOpponentProjectilesUntilRemoval)
-{
+TEST_F(GlobalStateFixture, deathPath_projectileKill_preservesOpponentProjectilesUntilRemoval) {
     Game game(16U);
     game.startNewGame();
     auto& state = game.getState();
@@ -457,8 +443,7 @@ TEST_F(GlobalStateFixture, deathPath_projectileKill_preservesOpponentProjectiles
     EXPECT_EQ(TestSupport::colonySize(state.opponents), 0u);
 }
 
-TEST_F(GlobalStateFixture, deathPath_bodyCollision_destroysOpponentAndProjectilesSameFrame)
-{
+TEST_F(GlobalStateFixture, deathPath_bodyCollision_destroysOpponentAndProjectilesSameFrame) {
     Game game(17U);
     game.startNewGame();
     auto& state = game.getState();
@@ -481,8 +466,7 @@ TEST_F(GlobalStateFixture, deathPath_bodyCollision_destroysOpponentAndProjectile
 }
 
 TEST_F(GlobalStateFixture,
-       deathPath_groundImpact_destroysOpponentAndProjectilesBeforeCollisionPhase)
-{
+       deathPath_groundImpact_destroysOpponentAndProjectilesBeforeCollisionPhase) {
     Game game(18U);
     game.startNewGame();
     auto& state = game.getState();

@@ -6,8 +6,7 @@
 #include <tests/test_support.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, horizontalProjectileConstructorAndUpdate)
-{
+TEST_F(GlobalStateFixture, horizontalProjectileConstructorAndUpdate) {
     Projectile projectile(10.0f, 20.0f, 1.0f, 600.0f);
 
     EXPECT_TRUE(projectile.isHorizontal());
@@ -20,8 +19,7 @@ TEST_F(GlobalStateFixture, horizontalProjectileConstructorAndUpdate)
     EXPECT_NEAR(projectile.getAge(), 0.1f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, horizontalProjectileLifetimeUsesWindowCoverageWithVisibilityBuffer)
-{
+TEST_F(GlobalStateFixture, horizontalProjectileLifetimeUsesWindowCoverageWithVisibilityBuffer) {
     globals.windowWidth = 1280;
     Projectile projectile(10.0f, 20.0f, 1.0f, 2040.0f);
 
@@ -32,15 +30,13 @@ TEST_F(GlobalStateFixture, horizontalProjectileLifetimeUsesWindowCoverageWithVis
     EXPECT_GT(projectile.getLifetime(), strictCoverageLifetime);
 }
 
-TEST_F(GlobalStateFixture, horizontalProjectileLifetimeFallsBackForInvalidSpeed)
-{
+TEST_F(GlobalStateFixture, horizontalProjectileLifetimeFallsBackForInvalidSpeed) {
     Projectile projectile(10.0f, 20.0f, 1.0f, 0.0f);
 
     EXPECT_NEAR(projectile.getLifetime(), 0.55f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, playerShootUsesTripledBaseSpeedWhenNotBoosted)
-{
+TEST_F(GlobalStateFixture, playerShootUsesTripledBaseSpeedWhenNotBoosted) {
     Player player(10.0f, 20.0f, 80.0f, 48.0f);
 
     player.shoot();
@@ -52,8 +48,7 @@ TEST_F(GlobalStateFixture, playerShootUsesTripledBaseSpeedWhenNotBoosted)
     EXPECT_NEAR(projectileIt->getVelocity().x, 2040.0f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, playerShootBoostAddsMovementDeltaToShotSpeed)
-{
+TEST_F(GlobalStateFixture, playerShootBoostAddsMovementDeltaToShotSpeed) {
     Player player(10.0f, 20.0f, 80.0f, 48.0f);
     const float regularSpeed = player.getSpeed();
 
@@ -70,8 +65,7 @@ TEST_F(GlobalStateFixture, playerShootBoostAddsMovementDeltaToShotSpeed)
     EXPECT_NEAR(projectileIt->getVelocity().x, expectedShotSpeed, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, aimedProjectileConstructorNormalizesVelocity)
-{
+TEST_F(GlobalStateFixture, aimedProjectileConstructorNormalizesVelocity) {
     Projectile projectile(0.0f, 0.0f, 3.0f, 4.0f, 10.0f);
 
     EXPECT_FALSE(projectile.isHorizontal());
@@ -79,16 +73,14 @@ TEST_F(GlobalStateFixture, aimedProjectileConstructorNormalizesVelocity)
     EXPECT_NEAR(projectile.getVelocity().y, 8.0f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, aimedProjectileHandlesZeroDistanceSafely)
-{
+TEST_F(GlobalStateFixture, aimedProjectileHandlesZeroDistanceSafely) {
     Projectile projectile(10.0f, 10.0f, 10.0f, 10.0f, 250.0f);
 
     EXPECT_NEAR(projectile.getVelocity().x, 0.0f, 0.0001f);
     EXPECT_NEAR(projectile.getVelocity().y, 0.0f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, projectileColorBlueChannelClampsAtZeroForNegativeSineRange)
-{
+TEST_F(GlobalStateFixture, projectileColorBlueChannelClampsAtZeroForNegativeSineRange) {
     Projectile projectile(10.0f, 20.0f, 1.0f, 600.0f);
     const float ageAtBlueMinimum = std::numbers::pi_v<float> / 35.0f;
     projectile.update(ageAtBlueMinimum);
@@ -100,8 +92,7 @@ TEST_F(GlobalStateFixture, projectileColorBlueChannelClampsAtZeroForNegativeSine
     EXPECT_LE(color.a, static_cast<Uint8>(255));
 }
 
-TEST_F(GlobalStateFixture, particleFadesAndExpiresWithLifetime)
-{
+TEST_F(GlobalStateFixture, particleFadesAndExpiresWithLifetime) {
     Particle particle(0.0f, 0.0f, 20.0f, 0.0f, 255, 120, 50, 2.0f, 0.2f);
 
     EXPECT_TRUE(particle.isAlive());
@@ -114,8 +105,7 @@ TEST_F(GlobalStateFixture, particleFadesAndExpiresWithLifetime)
     EXPECT_FALSE(particle.isAlive());
 }
 
-TEST_F(GlobalStateFixture, particleWithZeroLifetimeFallsBackToZeroAlphaSafely)
-{
+TEST_F(GlobalStateFixture, particleWithZeroLifetimeFallsBackToZeroAlphaSafely) {
     Particle particle(0.0f, 0.0f, 0.0f, 0.0f, 255, 120, 50, 2.0f, 0.0f);
 
     particle.update(0.016f);
@@ -123,8 +113,7 @@ TEST_F(GlobalStateFixture, particleWithZeroLifetimeFallsBackToZeroAlphaSafely)
     EXPECT_FALSE(particle.isAlive());
 }
 
-TEST_F(GlobalStateFixture, particleWithTinyLifetimeKeepsAlphaChannelValid)
-{
+TEST_F(GlobalStateFixture, particleWithTinyLifetimeKeepsAlphaChannelValid) {
     Particle particle(0.0f, 0.0f, 0.0f, 0.0f, 255, 120, 50, 2.0f, 0.0001f);
 
     particle.update(1.0f);

@@ -8,26 +8,19 @@
 #include <plf/plf_colony.h>
 #include <string>
 #include <vector>
-struct GameStateData
-{
-    enum class State
-    {
-        MENU,
-        PLAYING,
-        GAME_OVER,
-        HOW_TO_PLAY,
-        VIEW_HIGH_SCORES
-    };
+
+struct GameStateData {
+    enum class State { MENU, PLAYING, GAME_OVER, HOW_TO_PLAY, VIEW_HIGH_SCORES };
 
     State state = State::MENU;
     bool running = true;
 
     // high score
-    struct HighScore
-    {
+    struct HighScore {
         std::string name;
         int score;
     };
+
     std::vector<HighScore> highScores;
     static const int MAX_HIGH_SCORES = 10;
 
@@ -51,8 +44,7 @@ struct GameStateData
     std::vector<SDL_FPoint> landscape;
 };
 
-struct GameInput
-{
+struct GameInput {
     bool moveLeft = false;
     bool moveRight = false;
     bool moveUp = false;

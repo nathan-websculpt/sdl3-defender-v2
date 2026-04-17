@@ -2,8 +2,7 @@
 
 struct GameStateData;
 
-class RenderMain
-{
+class RenderMain {
   public:
     static void render(const GameStateData& state);
 

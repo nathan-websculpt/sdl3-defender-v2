@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
-class Globals
-{
+
+class Globals {
   public:
     Globals() = default;
 

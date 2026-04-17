@@ -1,9 +1,10 @@
-#include <core/random/rng_service.h>
 #include <gtest/gtest.h>
 #include <limits>
 #include <memory>
-TEST(RandomService, deterministicStreamsMatchForSameSeed)
-{
+
+#include <core/random/rng_service.h>
+
+TEST(RandomService, deterministicStreamsMatchForSameSeed) {
     constexpr std::uint64_t baseSeed = 123456789ULL;
     auto lhs = std::make_unique<Random::RngStreams>(Random::makeDeterministicStreams(baseSeed));
     auto rhs = std::make_unique<Random::RngStreams>(Random::makeDeterministicStreams(baseSeed));
@@ -17,8 +18,7 @@ TEST(RandomService, deterministicStreamsMatchForSameSeed)
         auto& lhsSim = lhs->simEngine;
         auto& rhsSim = rhs->simEngine;
 
-        for (int i = 0; i < 64; ++i)
-        {
+        for (int i = 0; i < 64; ++i) {
             EXPECT_EQ(Random::randomIntInclusive(lhsSim, -1000, 1000),
                       Random::randomIntInclusive(rhsSim, -1000, 1000));
         }
@@ -28,20 +28,17 @@ TEST(RandomService, deterministicStreamsMatchForSameSeed)
         auto& lhsFx = lhs->fxEngine;
         auto& rhsFx = rhs->fxEngine;
 
-        for (int i = 0; i < 64; ++i)
-        {
+        for (int i = 0; i < 64; ++i) {
             EXPECT_EQ(Random::randomIntInclusive(lhsFx, -1000, 1000),
                       Random::randomIntInclusive(rhsFx, -1000, 1000));
         }
     }
 }
 
-TEST(RandomService, helperOutputsStayWithinExpectedRanges)
-{
+TEST(RandomService, helperOutputsStayWithinExpectedRanges) {
     auto streams = Random::makeDeterministicStreams(987654321ULL);
 
-    for (int i = 0; i < 256; ++i)
-    {
+    for (int i = 0; i < 256; ++i) {
         const int boundedInt = Random::randomIntInclusive(streams.simEngine, -5, 7);
         EXPECT_GE(boundedInt, -5);
         EXPECT_LE(boundedInt, 7);
@@ -56,19 +53,16 @@ TEST(RandomService, helperOutputsStayWithinExpectedRanges)
     }
 }
 
-TEST(RandomService, chanceBoundaryValuesAreDeterministic)
-{
+TEST(RandomService, chanceBoundaryValuesAreDeterministic) {
     auto streams = Random::makeDeterministicStreams(222ULL);
 
-    for (int i = 0; i < 128; ++i)
-    {
+    for (int i = 0; i < 128; ++i) {
         EXPECT_FALSE(Random::randomChance(streams.simEngine, 0.0));
         EXPECT_TRUE(Random::randomChance(streams.simEngine, 1.0));
     }
 }
 
-TEST(RandomService, invalidInputFallbacksAreDeterministicInRelease)
-{
+TEST(RandomService, invalidInputFallbacksAreDeterministicInRelease) {
 #ifndef NDEBUG
     GTEST_SKIP() << "release-only fallback checks";
 #else

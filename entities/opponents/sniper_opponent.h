@@ -1,8 +1,9 @@
 #pragma once
-#include <core/config.h>
 #include <entities/opponents/base_opponent.h>
-class SniperOpponent : public BaseOpponent
-{
+
+#include <core/config.h>
+
+class SniperOpponent : public BaseOpponent {
   public:
     SniperOpponent(float x, float y, float w, float h, float oscillationOffset);
     ~SniperOpponent() = default;
@@ -10,8 +11,7 @@ class SniperOpponent : public BaseOpponent
     void update(float deltaTime, const SDL_FPoint& playerPos, float cameraX,
                 Random::RngEngine& simRng) override;
 
-    const std::string& getTextureKey() const override
-    {
+    const std::string& getTextureKey() const override {
         return Config::Textures::SNIPER_OPPONENT;
     }
 

@@ -1,11 +1,12 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <core/config.h>
-#include <core/globals.h>
 #include <entities/player.h>
 #include <vector>
-class GameHelper
-{
+
+#include <core/config.h>
+#include <core/globals.h>
+
+class GameHelper {
   public:
     explicit GameHelper(const std::vector<SDL_FPoint>& landscape);
     ~GameHelper() = default;

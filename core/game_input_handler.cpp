@@ -1,20 +1,18 @@
 #include <algorithm>
+
 #include <core/config.h>
 #include <core/game.h>
 #include <core/globals.h>
 #include <core/ui/ui_button.h>
-namespace
-{
-void submitNormalizedHighScoreFromInput(HighScores& highScores, GameStateData& state)
-{
+
+namespace {
+void submitNormalizedHighScoreFromInput(HighScores& highScores, GameStateData& state) {
     highScores.submitHighScore(normalizeHighScoreName(state.highScoreNameInput), state);
 }
 } // namespace
 
-void Game::handleEscapeKey()
-{
-    switch (m_state.state)
-    {
+void Game::handleEscapeKey() {
+    switch (m_state.state) {
     case GameStateData::State::MENU:
         m_state.running = false;
         break;
@@ -22,14 +20,11 @@ void Game::handleEscapeKey()
         m_state.state = GameStateData::State::MENU;
         break;
     case GameStateData::State::GAME_OVER:
-        if (m_state.waitingForHighScore)
-        {
+        if (m_state.waitingForHighScore) {
             submitNormalizedHighScoreFromInput(m_highScores, m_state);
             m_state.waitingForHighScore = false;
             m_state.state = GameStateData::State::MENU;
-        }
-        else
-        {
+        } else {
             m_state.state = GameStateData::State::MENU;
         }
         break;
@@ -42,14 +37,10 @@ void Game::handleEscapeKey()
     }
 }
 
-void Game::handleInputMenu(const GameInput& input)
-{
-    if (input.enter)
-    {
+void Game::handleInputMenu(const GameInput& input) {
+    if (input.enter) {
         startNewGame();
-    }
-    else if (input.mouseClick)
-    {
+    } else if (input.mouseClick) {
         const SDL_FRect playBtn = UIButtonLayout::mainMenuButtonRect(
             globals.windowWidth, globals.windowHeight, MainMenuButtonId::Play);
         const SDL_FRect howToPlayBtn = UIButtonLayout::mainMenuButtonRect(
@@ -59,52 +50,39 @@ void Game::handleInputMenu(const GameInput& input)
         const SDL_FRect exitBtn = UIButtonLayout::mainMenuButtonRect(
             globals.windowWidth, globals.windowHeight, MainMenuButtonId::Exit);
 
-        if (uiPointInRect(input.mouseX, input.mouseY, playBtn))
-        {
+        if (uiPointInRect(input.mouseX, input.mouseY, playBtn)) {
             startNewGame();
-        }
-        else if (uiPointInRect(input.mouseX, input.mouseY, howToPlayBtn))
-        {
+        } else if (uiPointInRect(input.mouseX, input.mouseY, howToPlayBtn)) {
             m_state.state = GameStateData::State::HOW_TO_PLAY;
-        }
-        else if (uiPointInRect(input.mouseX, input.mouseY, viewHighScoresBtn))
-        {
+        } else if (uiPointInRect(input.mouseX, input.mouseY, viewHighScoresBtn)) {
             m_state.state = GameStateData::State::VIEW_HIGH_SCORES;
-        }
-        else if (uiPointInRect(input.mouseX, input.mouseY, exitBtn))
-        {
+        } else if (uiPointInRect(input.mouseX, input.mouseY, exitBtn)) {
             m_state.running = false;
         }
     }
 }
 
-void Game::handleInputHowToPlay(const GameInput& input)
-{
+void Game::handleInputHowToPlay(const GameInput& input) {
     const SDL_FRect closeRect = UIButtonLayout::closeButtonRect(globals.windowWidth);
-    if (input.enter || (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect)))
-    {
+    if (input.enter || (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect))) {
         m_state.state = GameStateData::State::MENU;
     }
 }
 
-void Game::handleInputViewHighScores(const GameInput& input)
-{
+void Game::handleInputViewHighScores(const GameInput& input) {
     const SDL_FRect closeRect = UIButtonLayout::closeButtonRect(globals.windowWidth);
-    if (input.enter || (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect)))
-    {
+    if (input.enter || (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect))) {
         m_state.state = GameStateData::State::MENU;
     }
 }
 
-void Game::handleInputPlaying(const GameInput& input, float deltaTime)
-{
+void Game::handleInputPlaying(const GameInput& input, float deltaTime) {
     if (!m_state.player)
         return;
 
     m_state.player->setSpeedBoost(input.boost);
 
-    if (input.shoot && !m_prevShootState)
-    { // current frame: pressed, previous frame: not pressed
+    if (input.shoot && !m_prevShootState) { // current frame: pressed, previous frame: not pressed
         m_state.player->shoot();
     }
 
@@ -114,13 +92,11 @@ void Game::handleInputPlaying(const GameInput& input, float deltaTime)
     float speed = m_state.player->getSpeed();
     float dx = 0;
     float dy = 0;
-    if (input.moveLeft)
-    {
+    if (input.moveLeft) {
         dx -= speed * deltaTime;
         m_state.player->setFacing(Direction::LEFT);
     }
-    if (input.moveRight)
-    {
+    if (input.moveRight) {
         dx += speed * deltaTime;
         m_state.player->setFacing(Direction::RIGHT);
     }
@@ -131,62 +107,45 @@ void Game::handleInputPlaying(const GameInput& input, float deltaTime)
     m_state.player->moveBy(dx, dy);
 }
 
-void Game::handleInputGameOver(const GameInput& input, float deltaTime)
-{
-    if (m_state.waitingForHighScore)
-    {
-        if (input.charInputEvent)
-        {
+void Game::handleInputGameOver(const GameInput& input, float deltaTime) {
+    if (m_state.waitingForHighScore) {
+        if (input.charInputEvent) {
             char c = input.inputChar;
-            if (m_state.highScoreNameInput.length() < 10 && isAllowedHighScoreInputChar(c))
-            {
+            if (m_state.highScoreNameInput.length() < 10 && isAllowedHighScoreInputChar(c)) {
                 m_state.highScoreNameInput += c;
             }
         }
 
         const SecondsF BACKSPACE_DELAY = SecondsF{0.1f};
-        if (input.backspacePressed)
-        {
-            if (m_backspaceCooldown <= SecondsF{0.0f} && !m_state.highScoreNameInput.empty())
-            {
+        if (input.backspacePressed) {
+            if (m_backspaceCooldown <= SecondsF{0.0f} && !m_state.highScoreNameInput.empty()) {
                 m_state.highScoreNameInput.pop_back();
                 m_backspaceCooldown = BACKSPACE_DELAY;
-            }
-            else
-            {
+            } else {
                 m_backspaceCooldown =
                     std::max(SecondsF{0.0f}, m_backspaceCooldown - SecondsF{deltaTime});
             }
-        }
-        else
-        {
+        } else {
             m_backspaceCooldown = SecondsF{0.0f};
         }
 
         // process enter/click for submission/cancellation
-        if (input.enter)
-        {
+        if (input.enter) {
             submitNormalizedHighScoreFromInput(m_highScores, m_state);
             m_state.waitingForHighScore = false;
             m_state.state = GameStateData::State::MENU;
-        }
-        else if (input.mouseClick)
-        {
+        } else if (input.mouseClick) {
             const SDL_FRect closeRect = UIButtonLayout::closeButtonRect(globals.windowWidth);
-            if (uiPointInRect(input.mouseX, input.mouseY, closeRect))
-            {
+            if (uiPointInRect(input.mouseX, input.mouseY, closeRect)) {
                 submitNormalizedHighScoreFromInput(m_highScores, m_state);
                 m_state.waitingForHighScore = false;
                 m_state.state = GameStateData::State::MENU;
             }
         }
-    }
-    else
-    { // not waiting for high score - game over screen
+    } else { // not waiting for high score - game over screen
         const SDL_FRect closeRect = UIButtonLayout::closeButtonRect(globals.windowWidth);
         if (input.enter ||
-            (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect)))
-        {
+            (input.mouseClick && uiPointInRect(input.mouseX, input.mouseY, closeRect))) {
             m_state.state = GameStateData::State::MENU;
         }
     }

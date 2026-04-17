@@ -2,17 +2,16 @@
 #include <algorithm>
 #include <cmath>
 #include <entities/particle.h>
+
 Particle::Particle(float x, float y, float velocityX, float velocityY, Uint8 r, Uint8 g, Uint8 b,
                    float initialSize, float lifetime)
     : m_rect{x, y, initialSize, initialSize}, m_velocity{velocityX, velocityY}, m_r(r), m_g(g),
       m_b(b), m_alpha(255), m_age(0.0f), m_lifetime(lifetime), m_initialSize(initialSize),
       m_growRate(2.0f), // particle growth rate
       m_fadeRate(0.8f)  // rate at which alpha decreases per second
-{
-}
+{}
 
-void Particle::update(float deltaTime)
-{
+void Particle::update(float deltaTime) {
     m_rect.x += m_velocity.x * deltaTime;
     m_rect.y += m_velocity.y * deltaTime;
 
@@ -24,13 +23,11 @@ void Particle::update(float deltaTime)
     // calc alpha based on age and fade rate
     float alphaFloat = 0.0f;
     if (std::isfinite(m_lifetime) && m_lifetime > 0.0f && std::isfinite(m_age) &&
-        std::isfinite(m_fadeRate))
-    {
+        std::isfinite(m_fadeRate)) {
         alphaFloat = ((m_lifetime - m_age) / m_lifetime) * 255.0f * m_fadeRate;
     }
 
-    if (!std::isfinite(alphaFloat))
-    {
+    if (!std::isfinite(alphaFloat)) {
         alphaFloat = 0.0f;
     }
     alphaFloat = std::clamp(alphaFloat, 0.0f, 255.0f);
@@ -45,12 +42,10 @@ void Particle::update(float deltaTime)
     m_rect.y -= (currentSize - m_initialSize) * 0.5f;
 }
 
-SDL_FRect Particle::getBounds() const
-{
+SDL_FRect Particle::getBounds() const {
     return m_rect;
 }
 
-bool Particle::isAlive() const
-{
+bool Particle::isAlive() const {
     return m_age < m_lifetime && m_alpha > 0;
 }

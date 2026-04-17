@@ -1,23 +1,19 @@
 #include <core/helpers_game/colony_update_and_prune.h>
-namespace ColonyUpdateAndPrune
-{
 
-void projectiles(plf::colony<Projectile>& projectiles, float deltaTime, const GameHelper& helpers)
-{
-    for (auto it = projectiles.begin(); it != projectiles.end();)
-    {
+namespace ColonyUpdateAndPrune {
+
+void projectiles(plf::colony<Projectile>& projectiles, float deltaTime, const GameHelper& helpers) {
+    for (auto it = projectiles.begin(); it != projectiles.end();) {
         it->update(deltaTime);
 
-        if (it->isExpired())
-        {
+        if (it->isExpired()) {
             it = projectiles.erase(it);
             continue;
         }
 
         SDL_FRect b = it->getBounds();
 
-        if (helpers.isOutOfWorld(b, 0.0f, 0.0f))
-        {
+        if (helpers.isOutOfWorld(b, 0.0f, 0.0f)) {
             it = projectiles.erase(it);
             continue;
         }
@@ -27,8 +23,7 @@ void projectiles(plf::colony<Projectile>& projectiles, float deltaTime, const Ga
         float projBottom = b.y + b.h;
 
         // if projectile is at or below ground - remove it
-        if (projBottom >= groundY)
-        {
+        if (projBottom >= groundY) {
             it = projectiles.erase(it);
             continue;
         }
@@ -37,10 +32,8 @@ void projectiles(plf::colony<Projectile>& projectiles, float deltaTime, const Ga
     }
 }
 
-void particles(plf::colony<Particle>& particles, float deltaTime)
-{
-    for (auto it = particles.begin(); it != particles.end();)
-    {
+void particles(plf::colony<Particle>& particles, float deltaTime) {
+    for (auto it = particles.begin(); it != particles.end();) {
         it->update(deltaTime);
         if (!it->isAlive())
             it = particles.erase(it);
@@ -50,13 +43,10 @@ void particles(plf::colony<Particle>& particles, float deltaTime)
 }
 
 void healthItems(plf::colony<std::unique_ptr<HealthItem>>& healthItems, float deltaTime,
-                 const GameHelper& helpers)
-{
-    for (auto it = healthItems.begin(); it != healthItems.end();)
-    {
+                 const GameHelper& helpers) {
+    for (auto it = healthItems.begin(); it != healthItems.end();) {
         auto& item = *it;
-        if (!item)
-        {
+        if (!item) {
             ++it;
             continue;
         }
@@ -66,14 +56,12 @@ void healthItems(plf::colony<std::unique_ptr<HealthItem>>& healthItems, float de
         // check if item hit the landscape
         float groundY = helpers.getGroundYAt(itemBounds.x + itemBounds.w / 2.0f);
         float itemBottom = itemBounds.y + itemBounds.h;
-        if (itemBottom >= groundY && !item->isBlinking())
-        {
+        if (itemBottom >= groundY && !item->isBlinking()) {
             item->startBlinking();
         }
 
         // remove dead items (finished blinking)
-        if (!item->isAlive())
-        {
+        if (!item->isAlive()) {
             it = healthItems.erase(it);
             continue;
         }

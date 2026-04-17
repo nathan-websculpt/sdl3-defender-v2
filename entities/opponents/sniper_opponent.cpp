@@ -1,8 +1,8 @@
 #include <cmath>
 #include <entities/opponents/sniper_opponent.h>
+
 SniperOpponent::SniperOpponent(float x, float y, float w, float h, float oscillationOffset)
-    : BaseOpponent(x, y, w, h)
-{
+    : BaseOpponent(x, y, w, h) {
     m_speed = 30.0f;
     m_oscillationAmplitude = 60.0f;
     m_oscillationSpeed = 1.0f;
@@ -27,8 +27,7 @@ SniperOpponent::SniperOpponent(float x, float y, float w, float h, float oscilla
 }
 
 void SniperOpponent::update(float deltaTime, const SDL_FPoint& playerPos, float cameraX,
-                            [[maybe_unused]] Random::RngEngine& simRng)
-{
+                            [[maybe_unused]] Random::RngEngine& simRng) {
     if (m_health <= 0)
         return;
 
@@ -40,8 +39,7 @@ void SniperOpponent::update(float deltaTime, const SDL_FPoint& playerPos, float 
     m_fireTimer += deltaTime;
     bool opponentVisible = isOnScreen(m_rect.x + m_rect.w / 2, cameraX);
 
-    if (opponentVisible && m_fireTimer >= m_fireInterval)
-    {
+    if (opponentVisible && m_fireTimer >= m_fireInterval) {
         m_projectiles.emplace(m_rect.x + m_rect.w / 2, m_rect.y + m_rect.h / 2, playerPos.x,
                               playerPos.y, 1800.0f);
         m_fireTimer = 0.0f;

@@ -1,15 +1,15 @@
 #include <cmath>
-#include <core/helpers_game/game_helper.h>
-#include <core/helpers_platform/projectile_clipping.h>
 #include <entities/player.h>
 #include <gtest/gtest.h>
 #include <limits>
 #include <tests/test_support.h>
 #include <vector>
+
+#include <core/helpers_game/game_helper.h>
+#include <core/helpers_platform/projectile_clipping.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, groundInterpolationAndBoundsWork)
-{
+TEST_F(GlobalStateFixture, groundInterpolationAndBoundsWork) {
     const std::vector<SDL_FPoint> landscape{{0.0f, 700.0f}, {100.0f, 600.0f}, {200.0f, 650.0f}};
     const GameHelper helper(landscape);
 
@@ -20,8 +20,7 @@ TEST_F(GlobalStateFixture, groundInterpolationAndBoundsWork)
     EXPECT_FLOAT_EQ(helper.getGroundYAt(999.0f), 650.0f);
 }
 
-TEST_F(GlobalStateFixture, rectIntersectionIsCorrect)
-{
+TEST_F(GlobalStateFixture, rectIntersectionIsCorrect) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(700.0f);
     const GameHelper helper(landscape);
 
@@ -33,8 +32,7 @@ TEST_F(GlobalStateFixture, rectIntersectionIsCorrect)
     EXPECT_FALSE(helper.rectsIntersect(a, c));
 }
 
-TEST_F(GlobalStateFixture, beamEndHandlesSlopeAndDirection)
-{
+TEST_F(GlobalStateFixture, beamEndHandlesSlopeAndDirection) {
     const std::vector<SDL_FPoint> landscape{{0.0f, 700.0f}, {100.0f, 600.0f}, {200.0f, 700.0f}};
     const GameHelper helper(landscape);
 
@@ -54,8 +52,7 @@ TEST_F(GlobalStateFixture, beamEndHandlesSlopeAndDirection)
         ProjectileClipping::findBeamLandscapeIntersection(50.0f, 100.0f, true, landscape));
 }
 
-TEST_F(GlobalStateFixture, keepPlayerInBoundsClampsHudWorldAndGround)
-{
+TEST_F(GlobalStateFixture, keepPlayerInBoundsClampsHudWorldAndGround) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(700.0f);
     GameHelper helper(landscape);
 
@@ -76,8 +73,7 @@ TEST_F(GlobalStateFixture, keepPlayerInBoundsClampsHudWorldAndGround)
     EXPECT_FLOAT_EQ(clamped.y, 652.0f);
 }
 
-TEST_F(GlobalStateFixture, clippingHelpersReturnExpectedIntersections)
-{
+TEST_F(GlobalStateFixture, clippingHelpersReturnExpectedIntersections) {
     const std::vector<SDL_FPoint> landscape{{0.0f, 700.0f}, {100.0f, 600.0f}, {200.0f, 700.0f}};
 
     EXPECT_NEAR(ProjectileClipping::findBeamLandscapeIntersection(0.0f, 650.0f, true, landscape),
@@ -106,8 +102,7 @@ TEST_F(GlobalStateFixture, clippingHelpersReturnExpectedIntersections)
     EXPECT_NEAR(nearVertical.y, 100.0f, 0.0001f);
 }
 
-TEST_F(GlobalStateFixture, clippingHelpersHandleNonFiniteInputsSafely)
-{
+TEST_F(GlobalStateFixture, clippingHelpersHandleNonFiniteInputsSafely) {
     const std::vector<SDL_FPoint> landscape{{0.0f, 700.0f}, {100.0f, 600.0f}, {200.0f, 700.0f}};
     const float nanValue = std::numeric_limits<float>::quiet_NaN();
 

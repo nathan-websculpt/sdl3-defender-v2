@@ -1,5 +1,8 @@
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <entities/health_item.h>
+
 #include <core/config.h>
 #include <core/game_state_data.h>
 #include <core/globals.h>
@@ -9,12 +12,9 @@
 #include <core/helpers_platform_rendering/render_main.h>
 #include <core/helpers_platform_rendering/render_screens.h>
 #include <core/managers/texture_manager.h>
-#include <cstddef>
-#include <entities/health_item.h>
-void RenderMain::render(const GameStateData& state)
-{
-    switch (state.state)
-    {
+
+void RenderMain::render(const GameStateData& state) {
+    switch (state.state) {
     case GameStateData::State::MENU:
         RenderScreens::renderMainMenu();
         break;
@@ -28,12 +28,9 @@ void RenderMain::render(const GameStateData& state)
         renderPlaying(state);
         break;
     case GameStateData::State::GAME_OVER:
-        if (state.waitingForHighScore)
-        {
+        if (state.waitingForHighScore) {
             RenderScreens::renderHighScoreEntryScreen(state);
-        }
-        else
-        {
+        } else {
             RenderScreens::renderGameOverScreen(state);
         }
         break;
@@ -41,8 +38,7 @@ void RenderMain::render(const GameStateData& state)
     SDL_RenderPresent(globals.renderer);
 }
 
-void RenderMain::renderPlaying(const GameStateData& state)
-{
+void RenderMain::renderPlaying(const GameStateData& state) {
 #ifndef NDEBUG
     assert(state.player && "playing render requires player state");
 #endif
@@ -51,8 +47,7 @@ void RenderMain::renderPlaying(const GameStateData& state)
     SDL_RenderClear(globals.renderer);
 
     float cameraOffsetX = state.cameraX;
-    if (state.player)
-    {
+    if (state.player) {
         renderPlayerAndProjectiles(state, cameraOffsetX);
     }
     renderOpponentsAndProjectiles(state, cameraOffsetX);
@@ -66,25 +61,21 @@ void RenderMain::renderPlaying(const GameStateData& state)
     RenderHud::renderScore(state);
 }
 
-void RenderMain::renderPlayerAndProjectiles(const GameStateData& state, float cameraOffsetX)
-{
-    if (!state.player)
-    {
+void RenderMain::renderPlayerAndProjectiles(const GameStateData& state, float cameraOffsetX) {
+    if (!state.player) {
         return;
     }
     const Player& player = *state.player;
 
     SDL_Texture* playerTexture =
         TextureManager::getInstance().getTexture(Config::Textures::PLAYER, globals.renderer);
-    if (playerTexture)
-    {
+    if (playerTexture) {
         SDL_FRect renderBounds = player.getBounds();
         renderBounds.x -= cameraOffsetX;
 
         // apply flip based on player's facing-direction
         SDL_FRect drawRect = renderBounds;
-        if (player.getFacing() == Direction::LEFT)
-        {
+        if (player.getFacing() == Direction::LEFT) {
             drawRect.x += drawRect.w;
             drawRect.w = -drawRect.w;
         }
@@ -92,8 +83,7 @@ void RenderMain::renderPlayerAndProjectiles(const GameStateData& state, float ca
 
         // render player projectiles
         const auto& pp = player.getProjectiles();
-        for (const auto& p : pp)
-        {
+        for (const auto& p : pp) {
             if (p.isExpired())
                 continue;
 
@@ -109,8 +99,7 @@ void RenderMain::renderPlayerAndProjectiles(const GameStateData& state, float ca
 
             SDL_Color color = p.getColor();
             Uint8 renderAlpha = color.a;
-            if (renderAlpha < 220)
-            {
+            if (renderAlpha < 220) {
                 renderAlpha = 220;
             }
             SDL_SetRenderDrawColor(globals.renderer, color.r, color.g, color.b, renderAlpha);
@@ -119,10 +108,8 @@ void RenderMain::renderPlayerAndProjectiles(const GameStateData& state, float ca
     }
 }
 
-void RenderMain::renderOpponentsAndProjectiles(const GameStateData& state, float cameraOffsetX)
-{
-    for (const auto& o : state.opponents)
-    {
+void RenderMain::renderOpponentsAndProjectiles(const GameStateData& state, float cameraOffsetX) {
+    for (const auto& o : state.opponents) {
         if (!o || !o->isAlive())
             continue;
 
@@ -132,12 +119,9 @@ void RenderMain::renderOpponentsAndProjectiles(const GameStateData& state, float
         // render opponent texture
         SDL_Texture* opponentTexture =
             TextureManager::getInstance().getTexture(o->getTextureKey(), globals.renderer);
-        if (opponentTexture)
-        {
+        if (opponentTexture) {
             SDL_RenderTexture(globals.renderer, opponentTexture, nullptr, &renderBounds);
-        }
-        else
-        {
+        } else {
             // fallback rect
             RenderHelper::setRenderDrawColor(RenderColors::red);
             SDL_RenderFillRect(globals.renderer, &renderBounds);
@@ -145,8 +129,7 @@ void RenderMain::renderOpponentsAndProjectiles(const GameStateData& state, float
 
         // render opponent projectiles
         const auto& op = o->getProjectiles();
-        for (const auto& p : op)
-        {
+        for (const auto& p : op) {
             if (p.isExpired())
                 continue;
 
@@ -171,12 +154,9 @@ void RenderMain::renderOpponentsAndProjectiles(const GameStateData& state, float
     }
 }
 
-void RenderMain::renderParticles(const GameStateData& state, float cameraOffsetX)
-{
-    for (const auto& particle : state.particles)
-    {
-        if (particle.isAlive())
-        {
+void RenderMain::renderParticles(const GameStateData& state, float cameraOffsetX) {
+    for (const auto& particle : state.particles) {
+        if (particle.isAlive()) {
             SDL_FRect renderBounds = {particle.getX(), particle.getY(), particle.getCurrentSize(),
                                       particle.getCurrentSize()};
             renderBounds.x -= cameraOffsetX; // apply camera offset
@@ -188,13 +168,10 @@ void RenderMain::renderParticles(const GameStateData& state, float cameraOffsetX
     }
 }
 
-void RenderMain::renderLandscape(const GameStateData& state, float cameraOffsetX)
-{
-    if (!state.landscape.empty())
-    {
+void RenderMain::renderLandscape(const GameStateData& state, float cameraOffsetX) {
+    if (!state.landscape.empty()) {
         RenderHelper::setRenderDrawColor(RenderColors::gold1);
-        for (size_t i = 0; i < state.landscape.size() - 1; ++i)
-        {
+        for (size_t i = 0; i < state.landscape.size() - 1; ++i) {
             SDL_FPoint p1 = {state.landscape[i].x - cameraOffsetX, state.landscape[i].y};
             SDL_FPoint p2 = {state.landscape[i + 1].x - cameraOffsetX, state.landscape[i + 1].y};
             SDL_RenderLine(globals.renderer, p1.x, p1.y, p2.x, p2.y);
@@ -202,10 +179,8 @@ void RenderMain::renderLandscape(const GameStateData& state, float cameraOffsetX
     }
 }
 
-void RenderMain::renderHealthItems(const GameStateData& state, float cameraOffsetX)
-{
-    for (const auto& item : state.healthItems)
-    {
+void RenderMain::renderHealthItems(const GameStateData& state, float cameraOffsetX) {
+    for (const auto& item : state.healthItems) {
         if (!item || !item->isAlive())
             continue;
 
@@ -214,39 +189,30 @@ void RenderMain::renderHealthItems(const GameStateData& state, float cameraOffse
 
         SDL_Texture* itemTexture =
             TextureManager::getInstance().getTexture(item->getTextureKey(), globals.renderer);
-        if (itemTexture)
-        {
+        if (itemTexture) {
             // handle blinking
             Uint8 originalAlpha = 255;
-            if (item->isBlinking())
-            {
+            if (item->isBlinking()) {
                 originalAlpha = static_cast<Uint8>(item->getBlinkAlpha());
             }
             SDL_SetTextureAlphaMod(itemTexture, originalAlpha);
             SDL_RenderTexture(globals.renderer, itemTexture, nullptr, &renderBounds);
             SDL_SetTextureAlphaMod(itemTexture, 255); // ...resets alpha for next item
-        }
-        else
-        {
+        } else {
             // fallback rectangle
             RenderHelper::setRenderDrawColor(RenderColors::green);
-            if (item->getType() == HealthItemType::WORLD)
-            {
+            if (item->getType() == HealthItemType::WORLD) {
                 RenderHelper::setRenderDrawColor(RenderColors::textPrimary);
             }
-            if (item->isBlinking())
-            {
+            if (item->isBlinking()) {
                 // blinking effect
                 if (static_cast<int>(SDL_GetTicks() /
                                      (static_cast<int>(HealthItem::BLINK_DURATION * 1000) / 2)) %
                         2 ==
-                    0)
-                {
+                    0) {
                     SDL_RenderFillRect(globals.renderer, &renderBounds);
                 }
-            }
-            else
-            {
+            } else {
                 SDL_RenderFillRect(globals.renderer, &renderBounds);
             }
         }

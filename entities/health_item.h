@@ -1,14 +1,9 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <string>
-enum class HealthItemType
-{
-    PLAYER,
-    WORLD
-};
+enum class HealthItemType { PLAYER, WORLD };
 
-class HealthItem
-{
+class HealthItem {
   public:
     HealthItem(float x, float y, float w, float h, HealthItemType type,
                const std::string& textureKey, bool doesStop = false, int randomStopY = 0);

@@ -1,14 +1,15 @@
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <string>
+
 #include <core/config.h>
 #include <core/game_state_data.h>
 #include <core/globals.h>
 #include <core/helpers_platform_rendering/render_helper.h>
 #include <core/helpers_platform_rendering/render_hud.h>
-#include <cstddef>
-#include <string>
-void RenderHud::renderHudBackground()
-{
+
+void RenderHud::renderHudBackground() {
     // background
     RenderHelper::setRenderDrawColor(RenderColors::blueDark1);
     SDL_FRect hudBg = {0.0f, 0.0f, static_cast<float>(globals.windowWidth),
@@ -22,8 +23,7 @@ void RenderHud::renderHudBackground()
                    static_cast<float>(Config::Game::HUD_HEIGHT));
 }
 
-void RenderHud::renderHealthBars(const GameStateData& state)
-{
+void RenderHud::renderHealthBars(const GameStateData& state) {
     const int barW = 200;
     const int barH = 10;
     const int barX = 2;
@@ -35,12 +35,10 @@ void RenderHud::renderHealthBars(const GameStateData& state)
 #endif
 
     float playerHealthRatio = 0.0f;
-    if (state.player)
-    {
+    if (state.player) {
         const float pHealth = static_cast<float>(state.player->getHealth());
         const float pMaxHealth = static_cast<float>(state.player->getMaxHealth());
-        if (pMaxHealth > 0.0f)
-        {
+        if (pMaxHealth > 0.0f) {
             playerHealthRatio = pHealth / pMaxHealth;
         }
     }
@@ -55,8 +53,7 @@ void RenderHud::renderHealthBars(const GameStateData& state)
 }
 
 void RenderHud::renderHealthBar(const char* label, int x, int y, int width, int height,
-                                float healthRatio, const SDL_Color& labelColor)
-{
+                                float healthRatio, const SDL_Color& labelColor) {
     RenderHelper::renderText(label, x, y, labelColor, FontSize::SMALL);
 
     float fillWidth = std::max(0.0f, width * healthRatio);
@@ -75,8 +72,7 @@ void RenderHud::renderHealthBar(const char* label, int x, int y, int width, int 
     SDL_RenderRect(globals.renderer, &bgRect);
 }
 
-void RenderHud::renderMinimap(const GameStateData& state)
-{
+void RenderHud::renderMinimap(const GameStateData& state) {
     const int mmW = 210;
     const int mmH = 42;
     const int mmX = (globals.windowWidth - mmW) / 2;
@@ -93,8 +89,7 @@ void RenderHud::renderMinimap(const GameStateData& state)
     float sy = static_cast<float>(mmH) / globals.windowHeight;
 
     // light yellow dot for player
-    if (state.player)
-    {
+    if (state.player) {
         SDL_FRect pb = state.player->getBounds();
         float px = (pb.x * sx + mmX) - 1.0f;
         float py = pb.y * sy + mmY;
@@ -104,10 +99,8 @@ void RenderHud::renderMinimap(const GameStateData& state)
     }
 
     // red dots for opponents
-    for (const auto& o : state.opponents)
-    {
-        if (o && o->isAlive())
-        {
+    for (const auto& o : state.opponents) {
+        if (o && o->isAlive()) {
             SDL_FRect ob = o->getBounds();
             float ox = (ob.x * sx + mmX) - 1.0f;
             float oy = ob.y * sy + mmY;
@@ -118,10 +111,8 @@ void RenderHud::renderMinimap(const GameStateData& state)
     }
 
     // green dots for health
-    for (const auto& h : state.healthItems)
-    {
-        if (h && h->isAlive())
-        {
+    for (const auto& h : state.healthItems) {
+        if (h && h->isAlive()) {
             SDL_FRect hb = h->getBounds();
             float hx = (hb.x * sx + mmX) - 1.0f;
             float hy = hb.y * sy + mmY;
@@ -132,11 +123,9 @@ void RenderHud::renderMinimap(const GameStateData& state)
     }
 
     // render landscape
-    if (!state.landscape.empty())
-    {
+    if (!state.landscape.empty()) {
         RenderHelper::setRenderDrawColor(RenderColors::gold2);
-        for (size_t i = 0; i < state.landscape.size() - 1; ++i)
-        {
+        for (size_t i = 0; i < state.landscape.size() - 1; ++i) {
             float x1 = state.landscape[i].x * sx + mmX;
             float y1 = state.landscape[i].y * sy + mmY;
             float x2 = state.landscape[i + 1].x * sx + mmX;
@@ -152,8 +141,7 @@ void RenderHud::renderMinimap(const GameStateData& state)
     SDL_RenderRect(globals.renderer, &vr);
 }
 
-void RenderHud::renderScore(const GameStateData& state)
-{
+void RenderHud::renderScore(const GameStateData& state) {
     const int barY = 10;
     const int rightOffset = globals.windowWidth - 150;
 

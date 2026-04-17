@@ -1,35 +1,30 @@
 #include <algorithm>
 #include <cmath>
+#include <limits>
+
 #include <core/helpers_platform_rendering/render_helper.h>
 #include <core/helpers_platform_rendering/ui_button_renderer.h>
-#include <limits>
-namespace
-{
 
-[[nodiscard]] int toIntClamped(float value)
-{
-    if (!std::isfinite(value))
-    {
+namespace {
+
+[[nodiscard]] int toIntClamped(float value) {
+    if (!std::isfinite(value)) {
         return 0;
     }
 
-    if (value > static_cast<float>(std::numeric_limits<int>::max()))
-    {
+    if (value > static_cast<float>(std::numeric_limits<int>::max())) {
         return std::numeric_limits<int>::max();
     }
 
-    if (value < static_cast<float>(std::numeric_limits<int>::lowest()))
-    {
+    if (value < static_cast<float>(std::numeric_limits<int>::lowest())) {
         return std::numeric_limits<int>::lowest();
     }
 
     return static_cast<int>(value);
 }
 
-[[nodiscard]] int estimateGlyphWidth(FontSize size)
-{
-    switch (size)
-    {
+[[nodiscard]] int estimateGlyphWidth(FontSize size) {
+    switch (size) {
     case FontSize::SMALL:
         return 12;
     case FontSize::MEDIUM:
@@ -43,10 +38,8 @@ namespace
     return 14;
 }
 
-[[nodiscard]] int estimateTextHeight(FontSize size)
-{
-    switch (size)
-    {
+[[nodiscard]] int estimateTextHeight(FontSize size) {
+    switch (size) {
     case FontSize::SMALL:
         return 20;
     case FontSize::MEDIUM:
@@ -60,11 +53,9 @@ namespace
     return 24;
 }
 
-[[nodiscard]] int boundedTextWidth(const std::string& text, FontSize size)
-{
+[[nodiscard]] int boundedTextWidth(const std::string& text, FontSize size) {
     const int glyphWidth = estimateGlyphWidth(size);
-    if (glyphWidth <= 0)
-    {
+    if (glyphWidth <= 0) {
         return 0;
     }
 
@@ -76,8 +67,7 @@ namespace
 
 } // namespace
 
-UIButtonSpec UIButtonPresets::menu(const SDL_FRect& rect, const std::string& label)
-{
+UIButtonSpec UIButtonPresets::menu(const SDL_FRect& rect, const std::string& label) {
     UIButtonSpec button{};
     button.rect = rect;
     button.label = label;
@@ -89,8 +79,7 @@ UIButtonSpec UIButtonPresets::menu(const SDL_FRect& rect, const std::string& lab
     return button;
 }
 
-UIButtonSpec UIButtonPresets::close(int windowWidth, float margin, float size)
-{
+UIButtonSpec UIButtonPresets::close(int windowWidth, float margin, float size) {
     UIButtonSpec button{};
     button.rect = UIButtonLayout::closeButtonRect(windowWidth, margin, size);
     button.label = "X";
@@ -102,19 +91,16 @@ UIButtonSpec UIButtonPresets::close(int windowWidth, float margin, float size)
     return button;
 }
 
-void UIButtonRenderer::render(const UIButtonSpec& button)
-{
+void UIButtonRenderer::render(const UIButtonSpec& button) {
     RenderHelper::setRenderDrawColor(button.style.background);
     SDL_RenderFillRect(globals.renderer, &button.rect);
 
-    if (button.style.drawBorder)
-    {
+    if (button.style.drawBorder) {
         RenderHelper::setRenderDrawColor(button.style.border);
         SDL_RenderRect(globals.renderer, &button.rect);
     }
 
-    if (button.label.empty())
-    {
+    if (button.label.empty()) {
         return;
     }
 

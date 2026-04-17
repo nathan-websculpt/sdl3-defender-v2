@@ -2,8 +2,7 @@
 #include <SDL3/SDL.h>
 struct GameStateData;
 
-class RenderHud
-{
+class RenderHud {
   public:
     static void renderHudBackground();
     static void renderHealthBars(const GameStateData& state);

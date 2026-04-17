@@ -1,14 +1,14 @@
-#include <core/helpers_game/colony_update_and_prune.h>
-#include <core/helpers_game/game_helper.h>
 #include <entities/health_item.h>
 #include <entities/particle.h>
 #include <entities/projectile.h>
 #include <gtest/gtest.h>
 #include <tests/test_support.h>
+
+#include <core/helpers_game/colony_update_and_prune.h>
+#include <core/helpers_game/game_helper.h>
 using TestSupport::GlobalStateFixture;
 
-TEST_F(GlobalStateFixture, projectilePruneRemovesOutOfWorldEntries)
-{
+TEST_F(GlobalStateFixture, projectilePruneRemovesOutOfWorldEntries) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(700.0f);
     const GameHelper helper(landscape);
 
@@ -20,8 +20,7 @@ TEST_F(GlobalStateFixture, projectilePruneRemovesOutOfWorldEntries)
     EXPECT_EQ(TestSupport::colonySize(projectiles), 1u);
 }
 
-TEST_F(GlobalStateFixture, projectilePruneRemovesWhenTouchingGround)
-{
+TEST_F(GlobalStateFixture, projectilePruneRemovesWhenTouchingGround) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(50.0f);
     const GameHelper helper(landscape);
 
@@ -32,8 +31,7 @@ TEST_F(GlobalStateFixture, projectilePruneRemovesWhenTouchingGround)
     EXPECT_EQ(TestSupport::colonySize(projectiles), 0u);
 }
 
-TEST_F(GlobalStateFixture, projectilePruneRemovesExpiredByLifetime)
-{
+TEST_F(GlobalStateFixture, projectilePruneRemovesExpiredByLifetime) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(700.0f);
     const GameHelper helper(landscape);
 
@@ -44,8 +42,7 @@ TEST_F(GlobalStateFixture, projectilePruneRemovesExpiredByLifetime)
     EXPECT_EQ(TestSupport::colonySize(projectiles), 0u);
 }
 
-TEST_F(GlobalStateFixture, particlePruneRemovesExpiredParticles)
-{
+TEST_F(GlobalStateFixture, particlePruneRemovesExpiredParticles) {
     plf::colony<Particle> particles;
     particles.emplace(0.0f, 0.0f, 0.0f, 0.0f, 255, 0, 0, 2.0f, 0.05f);
 
@@ -53,8 +50,7 @@ TEST_F(GlobalStateFixture, particlePruneRemovesExpiredParticles)
     EXPECT_EQ(TestSupport::colonySize(particles), 0u);
 }
 
-TEST_F(GlobalStateFixture, healthItemPruneStartsBlinkingAndRemovesWhenDone)
-{
+TEST_F(GlobalStateFixture, healthItemPruneStartsBlinkingAndRemovesWhenDone) {
     const std::vector<SDL_FPoint> landscape = TestSupport::makeFlatLandscape(100.0f);
     const GameHelper helper(landscape);
 
@@ -66,8 +62,7 @@ TEST_F(GlobalStateFixture, healthItemPruneStartsBlinkingAndRemovesWhenDone)
     ASSERT_EQ(TestSupport::colonySize(items), 1u);
     ASSERT_TRUE(items.begin()->get()->isBlinking());
 
-    for (int i = 0; i < 6; ++i)
-    {
+    for (int i = 0; i < 6; ++i) {
         ColonyUpdateAndPrune::healthItems(items, HealthItem::BLINK_DURATION, helper);
     }
 

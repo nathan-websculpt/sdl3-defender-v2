@@ -1,15 +1,15 @@
 #include <SDL3_ttf/SDL_ttf.h>
-#include <core/managers/font_manager.h>
 #include <iostream>
 #include <sstream>
-FontManager& FontManager::getInstance()
-{
+
+#include <core/managers/font_manager.h>
+
+FontManager& FontManager::getInstance() {
     static FontManager instance;
     return instance;
 }
 
-TTF_Font* FontManager::getFont(const std::string& filepath, int size)
-{
+TTF_Font* FontManager::getFont(const std::string& filepath, int size) {
 
     // a unique key for filepath and size combination
     std::ostringstream keyStream;
@@ -17,14 +17,12 @@ TTF_Font* FontManager::getFont(const std::string& filepath, int size)
     std::string key = keyStream.str();
 
     auto it = m_fontCache.find(key);
-    if (it != m_fontCache.end())
-    {
+    if (it != m_fontCache.end()) {
         return it->second.get();
     }
 
     TTF_Font* font = TTF_OpenFont(filepath.c_str(), static_cast<float>(size));
-    if (!font)
-    {
+    if (!font) {
         SDL_Log("FontManager: Failed to load font '%s' with size %d: %s", filepath.c_str(), size,
                 SDL_GetError());
         return nullptr;
@@ -38,13 +36,11 @@ TTF_Font* FontManager::getFont(const std::string& filepath, int size)
     return insertedIt->second.get();
 }
 
-void FontManager::clearCache()
-{
+void FontManager::clearCache() {
     SDL_Log("FontManager: Clearing cache and closing %zu fonts.", m_fontCache.size());
     m_fontCache.clear(); // will automatically call the deleter for each font
 }
 
-FontManager::~FontManager()
-{
+FontManager::~FontManager() {
     clearCache();
 }

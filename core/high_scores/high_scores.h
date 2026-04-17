@@ -1,14 +1,14 @@
 #pragma once
-#include <core/config.h>
 #include <filesystem>
 #include <string>
+
+#include <core/config.h>
 struct GameStateData;
 
 bool isAllowedHighScoreInputChar(char c);
 std::string normalizeHighScoreName(const std::string& name);
 
-class HighScores
-{
+class HighScores {
   public:
     HighScores();
     HighScores(const std::filesystem::path& writablePathOverride,

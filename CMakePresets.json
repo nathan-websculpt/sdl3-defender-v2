@@ -1,0 +1,57 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 21,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "windows-vcpkg",
+      "displayName": "windows x64 (vcpkg)",
+      "description": "configure with Visual Studio and vcpkg from VCPKG_ROOT",
+      "generator": "Visual Studio 18 2026",
+      "binaryDir": "${sourceDir}/build-win-vcpkg",
+      "architecture": {
+        "value": "x64",
+        "strategy": "external"
+      },
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      },
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "windows-vcpkg-analyze",
+      "displayName": "windows x64 (vcpkg, msvc diagnostics)",
+      "description": "configure diagnostics lane with /W4 and /analyze",
+      "inherits": "windows-vcpkg",
+      "binaryDir": "${sourceDir}/build-win-vcpkg-analyze",
+      "cacheVariables": {
+        "SDL3DEFENDER_MSVC_DIAGNOSTICS": "ON",
+        "SDL3DEFENDER_BUILD_TESTS": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "windows-debug",
+      "configurePreset": "windows-vcpkg",
+      "configuration": "Debug"
+    },
+    {
+      "name": "windows-release",
+      "configurePreset": "windows-vcpkg",
+      "configuration": "Release"
+    },
+    {
+      "name": "windows-debug-analyze",
+      "configurePreset": "windows-vcpkg-analyze",
+      "configuration": "Debug"
+    }
+  ]
+}

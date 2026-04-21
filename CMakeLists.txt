@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 4.2)
 project(SDL3Defender LANGUAGES CXX)
 
 if (POLICY CMP0207)
@@ -69,17 +69,13 @@ target_link_libraries(${PROJECT_NAME}Core
 )
 
 if (WIN32)
-    if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.21)
-        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
-                $<TARGET_FILE_DIR:${PROJECT_NAME}>
-            COMMAND_EXPAND_LISTS
-            COMMENT "Copying runtime DLLs -> $<TARGET_FILE_DIR:${PROJECT_NAME}>"
-        )
-    else()
-        message(WARNING "CMake < 3.21: runtime DLL staging is not available via TARGET_RUNTIME_DLLS")
-    endif()
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
+            $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        COMMAND_EXPAND_LISTS
+        COMMENT "Copying runtime DLLs -> $<TARGET_FILE_DIR:${PROJECT_NAME}>"
+    )
 endif()
 
 # Filesystem support for older GCC versions
@@ -159,23 +155,19 @@ if (SDL3DEFENDER_BUILD_TESTS)
     gtest_discover_tests(${PROJECT_NAME}_tests DISCOVERY_TIMEOUT 60)
 endif()
 
-if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.21)
-    install(TARGETS ${PROJECT_NAME}
-        RUNTIME_DEPENDENCY_SET ${PROJECT_NAME}_runtime_deps
-        RUNTIME DESTINATION .
-    )
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME_DEPENDENCY_SET ${PROJECT_NAME}_runtime_deps
+    RUNTIME DESTINATION .
+)
 
-    install(RUNTIME_DEPENDENCY_SET ${PROJECT_NAME}_runtime_deps
-        DESTINATION .
-        PRE_EXCLUDE_REGEXES
-            "api-ms-.*"
-            "ext-ms-.*"
-        POST_EXCLUDE_REGEXES
-            ".*[Ww][Ii][Nn][Dd][Oo][Ww][Ss][\\\\/][Ss][Yy][Ss][Tt][Ee][Mm]32[\\\\/].*"
-    )
-else()
-    install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION .)
-endif()
+install(RUNTIME_DEPENDENCY_SET ${PROJECT_NAME}_runtime_deps
+    DESTINATION .
+    PRE_EXCLUDE_REGEXES
+        "api-ms-.*"
+        "ext-ms-.*"
+    POST_EXCLUDE_REGEXES
+        ".*[Ww][Ii][Nn][Dd][Oo][Ww][Ss][\\\\/][Ss][Yy][Ss][Tt][Ee][Mm]32[\\\\/].*"
+)
 
 if (EXISTS "${CMAKE_SOURCE_DIR}/assets")
     install(DIRECTORY "${CMAKE_SOURCE_DIR}/assets" DESTINATION .)

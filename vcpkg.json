@@ -10,7 +10,6 @@
     },
     "sdl3-ttf",
     "sdl3-mixer",
-    "tmxlite",
     "gtest"
   ]
 }

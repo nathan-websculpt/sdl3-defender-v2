@@ -1,8 +1,9 @@
+#include "core/helpers_game/collision_handler.h"
+
 #include <limits>
 #include <memory>
 
-#include <core/game_state_data.h>
-#include <core/helpers_game/collision_handler.h>
+#include "core/game_state_data.h"
 using namespace CollisionHandler;
 
 namespace {

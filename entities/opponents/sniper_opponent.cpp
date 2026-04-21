@@ -1,5 +1,6 @@
+#include "entities/opponents/sniper_opponent.h"
+
 #include <cmath>
-#include <entities/opponents/sniper_opponent.h>
 
 SniperOpponent::SniperOpponent(float x, float y, float w, float h, float oscillationOffset)
     : BaseOpponent(x, y, w, h) {

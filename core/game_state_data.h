@@ -1,13 +1,14 @@
 #pragma once
 
 #include <SDL3/SDL.h>
-#include <entities/health_item.h>
-#include <entities/opponents/base_opponent.h>
-#include <entities/player.h>
 #include <memory>
 #include <plf/plf_colony.h>
 #include <string>
 #include <vector>
+
+#include "entities/health_item.h"
+#include "entities/opponents/base_opponent.h"
+#include "entities/player.h"
 
 struct GameStateData {
     enum class State { MENU, PLAYING, GAME_OVER, HOW_TO_PLAY, VIEW_HIGH_SCORES };

@@ -1,5 +1,6 @@
+#include "entities/opponents/basic_opponent.h"
+
 #include <cmath>
-#include <entities/opponents/basic_opponent.h>
 
 BasicOpponent::BasicOpponent(float x, float y, float w, float h) : BaseOpponent(x, y, w, h) {
     m_speed = 30.0f;

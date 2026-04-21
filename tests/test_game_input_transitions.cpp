@@ -1,15 +1,15 @@
 #include <algorithm>
 #include <cmath>
-#include <entities/health_item.h>
-#include <entities/opponents/basic_opponent.h>
-#include <entities/opponents/sniper_opponent.h>
 #include <gtest/gtest.h>
 #include <string>
-#include <tests/test_support.h>
 
-#include <core/game.h>
-#include <core/game_state_data.h>
-#include <core/ui/ui_button.h>
+#include "core/game.h"
+#include "core/game_state_data.h"
+#include "core/ui/ui_button.h"
+#include "entities/health_item.h"
+#include "entities/opponents/basic_opponent.h"
+#include "entities/opponents/sniper_opponent.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 namespace {

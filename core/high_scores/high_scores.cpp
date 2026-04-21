@@ -1,3 +1,5 @@
+#include "core/high_scores/high_scores.h"
+
 #include <SDL3/SDL.h>
 #include <algorithm>
 #include <cctype>
@@ -7,8 +9,7 @@
 #include <system_error>
 #include <vector>
 
-#include <core/game_state_data.h>
-#include <core/high_scores/high_scores.h>
+#include "core/game_state_data.h"
 
 namespace {
 std::filesystem::path pathFromUtf8(const char* utf8Path) {

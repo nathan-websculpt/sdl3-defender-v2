@@ -1,5 +1,6 @@
+#include "entities/opponents/aggressive_opponent.h"
+
 #include <cmath>
-#include <entities/opponents/aggressive_opponent.h>
 
 AggressiveOpponent::AggressiveOpponent(float x, float y, float w, float h)
     : BaseOpponent(x, y, w, h) {

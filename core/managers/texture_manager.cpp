@@ -1,8 +1,8 @@
+#include "core/managers/texture_manager.h"
+
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 #include <iostream>
-
-#include <core/managers/texture_manager.h>
 
 TextureManager& TextureManager::getInstance() {
     static TextureManager instance; // only created once (C++11)

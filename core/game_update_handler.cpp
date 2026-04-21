@@ -1,14 +1,14 @@
 #include <algorithm>
-#include <entities/health_item.h>
-#include <entities/opponents/aggressive_opponent.h>
-#include <entities/opponents/basic_opponent.h>
-#include <entities/opponents/sniper_opponent.h>
 #include <numbers>
 
-#include <core/config.h>
-#include <core/game.h>
-#include <core/globals.h>
-#include <core/helpers_game/colony_update_and_prune.h>
+#include "core/config.h"
+#include "core/game.h"
+#include "core/globals.h"
+#include "core/helpers_game/colony_update_and_prune.h"
+#include "entities/health_item.h"
+#include "entities/opponents/aggressive_opponent.h"
+#include "entities/opponents/basic_opponent.h"
+#include "entities/opponents/sniper_opponent.h"
 
 void Game::updatePlayerAndProjectiles(float deltaTime) {
     if (!m_state.player)

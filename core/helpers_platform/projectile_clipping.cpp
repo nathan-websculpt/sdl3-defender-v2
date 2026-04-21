@@ -1,6 +1,6 @@
-#include <cmath>
+#include "core/helpers_platform/projectile_clipping.h"
 
-#include <core/helpers_platform/projectile_clipping.h>
+#include <cmath>
 
 namespace ProjectileClipping {
 // for player beams

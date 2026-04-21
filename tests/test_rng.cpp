@@ -2,7 +2,7 @@
 #include <limits>
 #include <memory>
 
-#include <core/random/rng_service.h>
+#include "core/random/rng_service.h"
 
 TEST(RandomService, deterministicStreamsMatchForSameSeed) {
     constexpr std::uint64_t baseSeed = 123456789ULL;

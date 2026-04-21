@@ -1,7 +1,8 @@
+#include "entities/particle.h"
+
 #include <SDL3/SDL.h>
 #include <algorithm>
 #include <cmath>
-#include <entities/particle.h>
 
 Particle::Particle(float x, float y, float velocityX, float velocityY, Uint8 r, Uint8 g, Uint8 b,
                    float initialSize, float lifetime)

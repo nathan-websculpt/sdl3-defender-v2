@@ -1,17 +1,18 @@
+#include "core/helpers_platform_rendering/render_main.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
-#include <entities/health_item.h>
 
-#include <core/config.h>
-#include <core/game_state_data.h>
-#include <core/globals.h>
-#include <core/helpers_platform/projectile_clipping.h>
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/helpers_platform_rendering/render_hud.h>
-#include <core/helpers_platform_rendering/render_main.h>
-#include <core/helpers_platform_rendering/render_screens.h>
-#include <core/managers/texture_manager.h>
+#include "core/config.h"
+#include "core/game_state_data.h"
+#include "core/globals.h"
+#include "core/helpers_platform/projectile_clipping.h"
+#include "core/helpers_platform_rendering/render_helper.h"
+#include "core/helpers_platform_rendering/render_hud.h"
+#include "core/helpers_platform_rendering/render_screens.h"
+#include "core/managers/texture_manager.h"
+#include "entities/health_item.h"
 
 void RenderMain::render(const GameStateData& state) {
     switch (state.state) {

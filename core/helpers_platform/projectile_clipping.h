@@ -2,7 +2,7 @@
 #include <SDL3/SDL.h>
 #include <vector>
 
-#include <core/config.h>
+#include "core/config.h"
 
 namespace ProjectileClipping {
 float findBeamLandscapeIntersection(

@@ -1,17 +1,18 @@
+#include "core/platform.h"
+
 #include <SDL3_image/SDL_image.h>
 #include <algorithm>
 #include <chrono>
 #include <cmath>
 #include <cstring>
-#include <entities/health_item.h>
 #include <limits>
 #include <sstream>
 
-#include <core/game.h>
-#include <core/globals.h>
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/managers/sound_manager.h>
-#include <core/platform.h>
+#include "core/game.h"
+#include "core/globals.h"
+#include "core/helpers_platform_rendering/render_helper.h"
+#include "core/managers/sound_manager.h"
+#include "entities/health_item.h"
 
 Platform::Platform()
     : m_running(true), m_textInputActive(false), m_soundManagerInitialized(false),

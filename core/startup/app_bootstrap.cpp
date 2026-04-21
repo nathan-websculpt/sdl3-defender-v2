@@ -1,10 +1,10 @@
+#include "core/startup/app_bootstrap.h"
+
 #include <SDL3/SDL.h>
 #include <charconv>
 #include <filesystem>
 #include <iostream>
 #include <string_view>
-
-#include <core/startup/app_bootstrap.h>
 
 namespace {
 

@@ -1,9 +1,10 @@
+#include "core/helpers_platform_rendering/ui_button_renderer.h"
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
 
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/helpers_platform_rendering/ui_button_renderer.h>
+#include "core/helpers_platform_rendering/render_helper.h"
 
 namespace {
 

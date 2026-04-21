@@ -2,8 +2,8 @@
 #include <SDL3/SDL.h>
 #include <string>
 
-#include <core/config.h>
-#include <core/globals.h>
+#include "core/config.h"
+#include "core/globals.h"
 
 struct RenderColors {
     static constexpr SDL_Color primary = {0, 20, 40, 255}; // game background

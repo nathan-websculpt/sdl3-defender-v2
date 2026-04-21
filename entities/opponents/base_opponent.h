@@ -1,10 +1,10 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <entities/projectile.h>
 #include <plf/plf_colony.h>
 #include <string>
 
-#include <core/random/rng_service.h>
+#include "core/random/rng_service.h"
+#include "entities/projectile.h"
 class Particle;
 
 class BaseOpponent {

@@ -1,7 +1,8 @@
-#include <SDL3/SDL.h>
-#include <entities/projectile.h>
+#include "entities/projectile.h"
 
-#include <core/globals.h>
+#include <SDL3/SDL.h>
+
+#include "core/globals.h"
 
 namespace {
 

@@ -1,3 +1,5 @@
+#include "core/helpers_platform_rendering/render_helper.h"
+
 #include <cstring>
 #include <deque>
 #include <memory>
@@ -5,10 +7,9 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include <core/globals.h>
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/helpers_platform_rendering/ui_button_renderer.h>
-#include <core/managers/font_manager.h>
+#include "core/globals.h"
+#include "core/helpers_platform_rendering/ui_button_renderer.h"
+#include "core/managers/font_manager.h"
 
 namespace {
 

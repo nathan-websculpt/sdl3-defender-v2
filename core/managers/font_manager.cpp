@@ -1,8 +1,8 @@
+#include "core/managers/font_manager.h"
+
 #include <SDL3_ttf/SDL_ttf.h>
 #include <iostream>
 #include <sstream>
-
-#include <core/managers/font_manager.h>
 
 FontManager& FontManager::getInstance() {
     static FontManager instance;

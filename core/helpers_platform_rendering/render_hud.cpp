@@ -1,13 +1,14 @@
+#include "core/helpers_platform_rendering/render_hud.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <string>
 
-#include <core/config.h>
-#include <core/game_state_data.h>
-#include <core/globals.h>
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/helpers_platform_rendering/render_hud.h>
+#include "core/config.h"
+#include "core/game_state_data.h"
+#include "core/globals.h"
+#include "core/helpers_platform_rendering/render_helper.h"
 
 void RenderHud::renderHudBackground() {
     // background

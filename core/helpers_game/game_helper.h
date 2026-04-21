@@ -1,10 +1,10 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <entities/player.h>
 #include <vector>
 
-#include <core/config.h>
-#include <core/globals.h>
+#include "core/config.h"
+#include "core/globals.h"
+#include "entities/player.h"
 
 class GameHelper {
   public:

@@ -1,4 +1,4 @@
-#include <core/helpers_game/colony_update_and_prune.h>
+#include "core/helpers_game/colony_update_and_prune.h"
 
 namespace ColonyUpdateAndPrune {
 

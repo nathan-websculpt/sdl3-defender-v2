@@ -1,9 +1,9 @@
 #include <algorithm>
 
-#include <core/config.h>
-#include <core/game.h>
-#include <core/globals.h>
-#include <core/ui/ui_button.h>
+#include "core/config.h"
+#include "core/game.h"
+#include "core/globals.h"
+#include "core/ui/ui_button.h"
 
 namespace {
 void submitNormalizedHighScoreFromInput(HighScores& highScores, GameStateData& state) {

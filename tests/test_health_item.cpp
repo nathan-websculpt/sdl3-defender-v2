@@ -1,8 +1,9 @@
 #include <cmath>
-#include <entities/health_item.h>
 #include <gtest/gtest.h>
 #include <limits>
-#include <tests/test_support.h>
+
+#include "entities/health_item.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, healthItemFallsBeforeBlinking) {

@@ -1,3 +1,7 @@
+##### Note
+
+Early on, I verified that CMake include paths allowed project headers to be included using angle brackets (<...>). I found it interesting to experiment with. While technically valid, I standardized on quotes for project headers to preserve the conventional distinction between internal and external dependencies.
+
 # running
 
 ## run

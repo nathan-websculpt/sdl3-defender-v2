@@ -1,9 +1,9 @@
+#include "core/random/rng_service.h"
+
 #include <array>
 #include <cassert>
 #include <cmath>
 #include <cstdio>
-
-#include <core/random/rng_service.h>
 
 namespace {
 

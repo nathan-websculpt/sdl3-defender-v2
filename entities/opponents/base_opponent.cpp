@@ -1,11 +1,12 @@
+#include "entities/opponents/base_opponent.h"
+
 #include <algorithm>
 #include <cmath>
-#include <entities/opponents/base_opponent.h>
-#include <entities/particle.h>
 
-#include <core/config.h>
-#include <core/globals.h>
-#include <core/managers/sound_manager.h>
+#include "core/config.h"
+#include "core/globals.h"
+#include "core/managers/sound_manager.h"
+#include "entities/particle.h"
 
 namespace {
 

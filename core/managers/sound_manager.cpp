@@ -1,8 +1,8 @@
+#include "core/managers/sound_manager.h"
+
 #include <SDL3_mixer/SDL_mixer.h>
 #include <algorithm>
 #include <iostream>
-
-#include <core/managers/sound_manager.h>
 
 void MIX_Audio_Deleter::operator()(MIX_Audio* audio) const {
     if (audio) {

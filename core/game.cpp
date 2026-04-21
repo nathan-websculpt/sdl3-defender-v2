@@ -1,14 +1,15 @@
+#include "core/game.h"
+
 #include <algorithm>
 #include <cassert>
 #include <cctype>
-#include <entities/health_item.h>
 
-#include <core/config.h>
-#include <core/game.h>
-#include <core/globals.h>
-#include <core/helpers_game/collision_handler.h>
-#include <core/helpers_game/colony_update_and_prune.h>
-#include <core/managers/sound_manager.h>
+#include "core/config.h"
+#include "core/globals.h"
+#include "core/helpers_game/collision_handler.h"
+#include "core/helpers_game/colony_update_and_prune.h"
+#include "core/managers/sound_manager.h"
+#include "entities/health_item.h"
 
 Game::Game()
     : m_state{}, m_gameHelpers(m_state.landscape), m_rng(Random::makeRuntimeStreams()),

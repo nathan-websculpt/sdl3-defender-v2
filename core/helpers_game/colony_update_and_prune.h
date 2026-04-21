@@ -1,10 +1,10 @@
 #pragma once
-#include <entities/health_item.h>
-#include <entities/particle.h>
-#include <entities/projectile.h>
 #include <plf/plf_colony.h>
 
-#include <core/helpers_game/game_helper.h>
+#include "core/helpers_game/game_helper.h"
+#include "entities/health_item.h"
+#include "entities/particle.h"
+#include "entities/projectile.h"
 
 namespace ColonyUpdateAndPrune {
 void projectiles(plf::colony<Projectile>& projectiles, float deltaTime, const GameHelper& helpers);

@@ -3,7 +3,7 @@
 #include <SDL3/SDL.h>
 #include <string>
 
-#include <core/config.h>
+#include "core/config.h"
 
 struct ButtonStyle {
     SDL_Color background{0, 0, 0, 0};

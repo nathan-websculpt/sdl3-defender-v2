@@ -1,9 +1,9 @@
 #include <iostream>
 #include <optional>
 
-#include <core/game.h>
-#include <core/platform.h>
-#include <core/startup/app_bootstrap.h>
+#include "core/game.h"
+#include "core/platform.h"
+#include "core/startup/app_bootstrap.h"
 
 // void* operator new(std::size_t size) {
 //     std::cout << "Allocating " << size << " bytes\n";

@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <gtest/gtest.h>
 
-#include <core/managers/sound_manager.h>
+#include "core/managers/sound_manager.h"
 
 namespace {
 

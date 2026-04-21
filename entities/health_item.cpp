@@ -1,6 +1,7 @@
+#include "entities/health_item.h"
+
 #include <algorithm>
 #include <cmath>
-#include <entities/health_item.h>
 #include <limits>
 
 namespace {

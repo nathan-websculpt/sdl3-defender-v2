@@ -1,16 +1,16 @@
-#include <entities/health_item.h>
-#include <entities/opponents/basic_opponent.h>
-#include <entities/opponents/sniper_opponent.h>
-#include <entities/player.h>
 #include <gtest/gtest.h>
 #include <limits>
-#include <tests/test_support.h>
 
-#include <core/game.h>
-#include <core/game_state_data.h>
-#include <core/helpers_game/collision_handler.h>
-#include <core/helpers_game/game_helper.h>
-#include <core/high_scores/high_scores.h>
+#include "core/game.h"
+#include "core/game_state_data.h"
+#include "core/helpers_game/collision_handler.h"
+#include "core/helpers_game/game_helper.h"
+#include "core/high_scores/high_scores.h"
+#include "entities/health_item.h"
+#include "entities/opponents/basic_opponent.h"
+#include "entities/opponents/sniper_opponent.h"
+#include "entities/player.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, projectileCollisionAwardsScoreAndRemovesShot) {

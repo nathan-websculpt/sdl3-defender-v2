@@ -1,10 +1,11 @@
 #include <cmath>
-#include <entities/opponents/aggressive_opponent.h>
-#include <entities/opponents/basic_opponent.h>
-#include <entities/opponents/sniper_opponent.h>
-#include <entities/particle.h>
 #include <gtest/gtest.h>
-#include <tests/test_support.h>
+
+#include "entities/opponents/aggressive_opponent.h"
+#include "entities/opponents/basic_opponent.h"
+#include "entities/opponents/sniper_opponent.h"
+#include "entities/particle.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, basicOpponentMovesDownAndOscillates) {

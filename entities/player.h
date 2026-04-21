@@ -1,13 +1,13 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <entities/particle.h>
-#include <entities/projectile.h>
 #include <memory>
 #include <plf/plf_colony.h>
 #include <vector>
 
-#include <core/config.h>
-#include <core/random/rng_service.h>
+#include "core/config.h"
+#include "core/random/rng_service.h"
+#include "entities/particle.h"
+#include "entities/projectile.h"
 enum class Direction { RIGHT, LEFT };
 
 class Player {

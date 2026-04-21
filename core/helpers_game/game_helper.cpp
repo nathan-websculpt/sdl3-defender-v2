@@ -1,5 +1,6 @@
-#include <core/helpers_game/game_helper.h>
-#include <core/helpers_platform/projectile_clipping.h>
+#include "core/helpers_game/game_helper.h"
+
+#include "core/helpers_platform/projectile_clipping.h"
 
 GameHelper::GameHelper(const std::vector<SDL_FPoint>& landscape) : m_landscape(landscape) {}
 

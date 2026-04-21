@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
-#include <tests/test_support.h>
 #include <vector>
 
-#include <core/game_state_data.h>
-#include <core/high_scores/high_scores.h>
+#include "core/game_state_data.h"
+#include "core/high_scores/high_scores.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 namespace {

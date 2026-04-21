@@ -2,7 +2,7 @@
 #include <filesystem>
 #include <string>
 
-#include <core/config.h>
+#include "core/config.h"
 struct GameStateData;
 
 bool isAllowedHighScoreInputChar(char c);

@@ -1,7 +1,6 @@
 #pragma once
-#include <entities/opponents/base_opponent.h>
-
-#include <core/config.h>
+#include "core/config.h"
+#include "entities/opponents/base_opponent.h"
 
 class AggressiveOpponent : public BaseOpponent {
   public:

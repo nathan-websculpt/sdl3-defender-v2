@@ -1,11 +1,11 @@
-#include <entities/health_item.h>
-#include <entities/particle.h>
-#include <entities/projectile.h>
 #include <gtest/gtest.h>
-#include <tests/test_support.h>
 
-#include <core/helpers_game/colony_update_and_prune.h>
-#include <core/helpers_game/game_helper.h>
+#include "core/helpers_game/colony_update_and_prune.h"
+#include "core/helpers_game/game_helper.h"
+#include "entities/health_item.h"
+#include "entities/particle.h"
+#include "entities/projectile.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, projectilePruneRemovesOutOfWorldEntries) {

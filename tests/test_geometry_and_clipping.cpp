@@ -1,12 +1,12 @@
 #include <cmath>
-#include <entities/player.h>
 #include <gtest/gtest.h>
 #include <limits>
-#include <tests/test_support.h>
 #include <vector>
 
-#include <core/helpers_game/game_helper.h>
-#include <core/helpers_platform/projectile_clipping.h>
+#include "core/helpers_game/game_helper.h"
+#include "core/helpers_platform/projectile_clipping.h"
+#include "entities/player.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, groundInterpolationAndBoundsWork) {

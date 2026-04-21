@@ -8,8 +8,8 @@
 #include <plf/plf_colony.h>
 #include <vector>
 
-#include <core/config.h>
-#include <core/globals.h>
+#include "core/config.h"
+#include "core/globals.h"
 
 namespace TestSupport {
 

@@ -1,12 +1,13 @@
+#include "core/helpers_platform_rendering/render_screens.h"
+
 #include <string>
 
-#include <core/config.h>
-#include <core/game_state_data.h>
-#include <core/globals.h>
-#include <core/helpers_platform_rendering/render_helper.h>
-#include <core/helpers_platform_rendering/render_screens.h>
-#include <core/helpers_platform_rendering/ui_button_renderer.h>
-#include <core/managers/texture_manager.h>
+#include "core/config.h"
+#include "core/game_state_data.h"
+#include "core/globals.h"
+#include "core/helpers_platform_rendering/render_helper.h"
+#include "core/helpers_platform_rendering/ui_button_renderer.h"
+#include "core/managers/texture_manager.h"
 
 void RenderScreens::renderMainMenu() {
     RenderHelper::setRenderDrawColor(RenderColors::primary);

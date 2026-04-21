@@ -1,9 +1,10 @@
-#include <entities/particle.h>
-#include <entities/player.h>
-#include <entities/projectile.h>
 #include <gtest/gtest.h>
 #include <numbers>
-#include <tests/test_support.h>
+
+#include "entities/particle.h"
+#include "entities/player.h"
+#include "entities/projectile.h"
+#include "tests/test_support.h"
 using TestSupport::GlobalStateFixture;
 
 TEST_F(GlobalStateFixture, horizontalProjectileConstructorAndUpdate) {

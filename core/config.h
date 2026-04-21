@@ -30,7 +30,7 @@ const std::string HIGH_SCORES_FILENAME = "highscores.txt";
 namespace Sounds {
 const std::string GAME_START = "assets/audio/431243__audiopapkin__futuristic-organic-effect-39.wav";
 const std::string GAME_OVER = "assets/audio/159408__noirenex__life-lost-game-over.wav";
-const std::string PLAYER_SHOOT = "assets/audio/95933__robinhood76__01665-thin-laser-blast.wav";
+const std::string PLAYER_SHOOT = "assets/audio/580308__colorscrimsontears__lazer-shot-2.wav";
 const std::string OPPONENT_EXPLODE = "assets/audio/372182__supersound23__pop.wav";
 } // namespace Sounds
 } // namespace Config

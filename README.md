@@ -1,6 +1,6 @@
-##### Note
+##### Story
 
-Early on, I verified that CMake include paths allowed project headers to be included using angle brackets (<...>). I found it interesting to experiment with. While technically valid, I standardized on quotes for project headers to preserve the conventional distinction between internal and external dependencies.
+[Version 1 of the project](https://github.com/nathan-websculpt/sdl3-defender) was the project I used to ask for peer reviews of my code as I taught myself C++. The reviewers disagreed with one another on many topics, but I researched all opinions. These reviews led me to come back to Windows, so Version 1 is now a much older Linux based codebase that is frozen. Version 2 has many improvements, but I have yet to test on Linux, and the Windows release-gate is becoming an increasingly large part of what I am working on and learning, these days. I learned this with [the Garden Sim project](https://garden-sim.com) and am trying to find the time to finish this game's Windows release-gate. 
 
 # running
 

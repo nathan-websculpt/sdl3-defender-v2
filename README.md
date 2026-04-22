@@ -1,3 +1,7 @@
+# Defender-style game in C++ / SDL3
+
+![Gameplay Demo](doc/assets/def-gif-1.gif)
+
 ## Current Design
 
 - **Deterministic simulation**  

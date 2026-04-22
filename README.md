@@ -1,102 +1,95 @@
-##### Story
+## Current Design
 
-[Version 1 of the project](https://github.com/nathan-websculpt/sdl3-defender) was the repo I used to ask for peer reviews of my code as I taught myself C++. The reviewers disagreed with one another on many topics, but I researched all opinions. These reviews led me to come back to Windows, so Version 1 is now a much older Linux based codebase that is frozen. Version 2 has many improvements, but I have yet to test on Linux, and the Windows release-gate is becoming an increasingly large part of what I am working on and learning, these days. I learned this with [the Garden Sim project](https://garden-sim.com) and am trying to find the time to finish this game's Windows release-gate. 
+- **Deterministic simulation**  
+  Fixed timestep and stable update ordering, with seed-driven reproducibility when `--seed=<uint64>` is provided under consistent runtime inputs.
 
-# running
+- **Clear ownership with mostly centralized mutation**  
+  Gameplay state is primarily modeled in `GameStateData`, with simulation orchestration, timers, and RNG streams owned by `Game`. Platform/runtime state (for example window dimensions and renderer handles) is shared separately via `globals` and manager singletons. Most gameplay mutation occurs through `Game` update and input paths, though mutation is not strictly constrained to narrow interfaces.
 
-## run
+- **Separation of simulation and presentation**  
+  Rendering receives gameplay state through const interfaces and currently treats it as read-only; render-side caches and SDL render state may still mutate.
 
+- **Production-first build and runtime validation**  
+  Build, test, and runtime workflows are provided as explicit scripts and presets.
+
+## What this Project Emphasizes
+
+This is a small game used to explore system-level concerns:
+
+- deterministic simulation via fixed-step update, stable ordering, and seeded RNG
+- explicit state ownership with mostly centralized mutation
+- container and lifetime tradeoffs (e.g., `plf::colony`)
+- gameplay/render separation without claiming fully immutable render internals
+- preset-driven CMake configuration, PowerShell build/test/analyze scripts, and an optional diagnostics lane (`/analyze`) define a consistent Windows development workflow
+
+## Docs
+
+- [Development](doc/development.md) — build, test, and analysis workflows
+- [Architecture](doc/architecture.md) — modules, ownership
+- [Entity Model](doc/entity_model.md) — containers, lifetime
+- [Game Loop](doc/game_loop.md) — fixed-step, ordering
+- [Rendering Pipeline](doc/rendering_pipeline.md) — draw order
+- [Notes](doc/notes.md) — dev notes
+- [Roadmap](doc/roadmap.md) — pending work
+
+## Quick Start
+
+Requires CMake 4.2+.
+
+### Run Game
 ```powershell
 ./build.ps1 -VcpkgRoot "C:\vcpkg\dir"
 ```
 
-## run all tests
+See [Development](doc/development.md) in the docs for more information about running, testing, or performing static analysis.
 
-```powershell
-./test.ps1 -VcpkgRoot "C:\vcpkg\dir"
-```
+## Architecture
 
-optional: run tests in release config
+### Startup
+- main → bootstrap (seed, working dir)
+- construct `Game`
+- hand off to `Platform::run`
 
-```powershell
-./test.ps1 -VcpkgRoot "C:\vcpkg\dir" -Config Release
-```
+### Runtime ownership
+- **Platform**
+  - SDL init + shutdown
+  - main loop
+  - input polling
+- **Game**
+  - simulation orchestration
+  - timers + RNG
+  - all gameplay mutation
+- **GameStateData**
+  - entity containers
+  - core gameplay state
+- **globals**
+  - renderer
+  - window dimensions
+- **managers**
+  - texture / font / sound caches
 
-## analyze
+### Mutation rules
+- input mutates state
+- update mutates state
+- collision mutates state (often immediate)
+- pruning is distributed (no single owner)
 
-```powershell
-./analyze.ps1 -VcpkgRoot "C:\vcpkg\dir"
-```
+### Rendering rules
+- takes `const GameStateData&`
+- no gameplay mutation
+- mutates render-side state:
+  - caches
+  - SDL objects
 
-## windows (preset-first)
+### Entity lifecycle
+- no single lifecycle model
+- removal is path-dependent:
+  - immediate erase **or**
+  - deferred prune
 
-set `VCPKG_ROOT` to your local vcpkg checkout
+## License
 
-```powershell
-$env:VCPKG_ROOT = "C:/path/to/vcpkg"
-cmake --preset windows-vcpkg
-cmake --build --preset windows-debug --target SDL3Defender
-```
+This project is licensed under the MIT License.
 
-## windows diagnostics lane (opt-in)
-
-use the dedicated analyze preset for an opt-in MSVC diagnostics build path
-
-```powershell
-$env:VCPKG_ROOT = "C:/path/to/vcpkg"
-cmake --preset windows-vcpkg-analyze
-cmake --build --preset windows-debug-analyze --target SDL3Defender
-```
-
-## run all tests (manual cmake/ctest)
-
-optional lower-level equivalent of `test.ps1` for explicit cmake/ctest control
-
-```powershell
-$env:VCPKG_ROOT = "C:/path/to/vcpkg"
-cmake --preset windows-vcpkg
-cmake --build --preset windows-debug --target SDL3Defender_tests
-ctest --test-dir build-win-vcpkg -C Debug --output-on-failure
-```
-
-release variant
-
-```powershell
-$env:VCPKG_ROOT = "C:/path/to/vcpkg"
-cmake --preset windows-vcpkg
-cmake --build --preset windows-release --target SDL3Defender_tests
-ctest --test-dir build-win-vcpkg -C Release --output-on-failure
-```
-
-optional: list all discovered tests without running them
-
-```powershell
-ctest --test-dir build-win-vcpkg -C Debug -N
-```
-
-run from terminal
-
-```powershell
-.\build-win-vcpkg\bin\Debug\SDL3Defender.exe
-```
-
-or double-click `build-win-vcpkg/bin/Debug/SDL3Defender.exe`
-
-## linux convenience script
-
-`build.sh` is still the Linux convenience flow
-
-```bash
-./build.sh
-```
-
-## Open in Visual Studio
-
-1. Install Visual Studio with the **Desktop development with C++** workload.
-2. Ensure `VCPKG_ROOT` is set to your vcpkg installation path.
-3. Open the repository root folder in Visual Studio (`File > Open > Folder`).
-4. Select a build preset from the toolbar:
-   - `windows-debug` (for development)
-   - `windows-release` (for optimized builds)
-5. If prompted about a toolchain/cache mismatch, click **Delete and regenerate cache**.
-6. Build and run the executable target from the toolbar.
+Third-party libraries, fonts, and audio assets are licensed separately.
+See [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES.txt) for details.
